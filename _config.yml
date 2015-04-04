@@ -2,18 +2,20 @@
 permalink:        pretty
 relative_permalinks: true
 
+excerpt_separator: "<!-- more -->" # Adds read more feature
+
 # Setup
-title:            Poole
-tagline:          The Jekyll Butler
-url:              http://getpoole.com
+title:            James Gardiner
+tagline:          A blog about QGIS, Leaflet, OpenLayers and Python
+url:              http://jamesgardiner.github.io
 paginate:         1
 baseurl:          /
 author:
-  name:           Mark Otto
-  url:            https://twitter.com/mdo
-  email:          markdotto@gmail.com
+  name:           James Gardiner
+  url:            https://twitter.com/
+  email:          jamesg87@me.com
 
 # Custom vars
 version:          1.0.0
 github:
-  repo:           https://github.com/poole/poole
+  repo:           https://github.com/JamesGardiner/jamesgardiner.github.io
