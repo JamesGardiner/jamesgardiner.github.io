@@ -15,14 +15,15 @@
         <div class="container">
           <h3 class="masthead-title">
             <a href="/" title="Home">{{ site.title }}</a>
+            <br />
             <small>{{ site.tagline }}</small>
           </h3>
         </div>
       </div>
 
       <div class="container content">
-        {{ content }}
-        {% include disquss.html %}
+	    {{ content | split: '<!-- more -->' | first }}
+	    {% include disquss.html %}
       </div>
     </div>
 

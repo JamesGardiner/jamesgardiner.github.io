@@ -10,7 +10,7 @@ relative_permalinks: true
 
 # Setup
 title:               James Gardiner
-tagline:             'The personal blog of James Gardiner'
+tagline:             'A Blog about open source geo software - QGIS, Leaflet, OpenLayers and Python'
 description:         'The personal blog of James Gardiner'
 url:                 jamesgardiner.github.io
 baseurl:             /
@@ -24,3 +24,5 @@ author:
 
 # Custom vars
 version:             1.0.0
+paginate:            5
+excerpt_separator:   "<!--more-->"

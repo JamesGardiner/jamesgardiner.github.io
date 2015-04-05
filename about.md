@@ -1,30 +1,26 @@
 ---
 layout: page
-title: About
+title: About me
 ---
 
 <p class="message">
-  Hey there! This page is included as an example. Feel free to customize it for your own use upon downloading. Carry on!
+  Hi, this is a personal blog that I'm using to capture some of my work on open geospatial software such as QGIS, Leaflet or OpenLayers. Occasionally I'll look to include some Python as well.
 </p>
 
-In the novel, *The Strange Case of Dr. Jeykll and Mr. Hyde*, Mr. Poole is Dr. Jekyll's virtuous and loyal butler. Similarly, Poole is an upstanding and effective butler that helps you build Jekyll themes. It's made by [@mdo](https://twitter.com/mdo).
+My background is in environmental science and remote sensing - I studied Geography as an undergraduate at Swansea University and then went on to complete an MSc By Research in Glaciology, which focused on the use of Synthetic Aperture Radar (SAR) for the detection of surface change processes on Arctic ice-caps.
 
-There are currently two themes built on Poole:
+I am now a Senior Statistical Consultant working for a medium-sized business based in Cardiff, South Wales. I mainly deal with web-based information systems using proprietary software, but more and more am turning to open source solutions to meet customer needs.
 
-* [Hyde](http://hyde.getpoole.com)
-* [Lanyon](http://lanyon.getpoole.com)
+Outside of work I get to look after a pair of twin boys that I'm lucky enough to call my own (number 3 is on the way!) who keep me busy with all the usual kid related activities!
+## Current Projects
 
-Learn more and contribute on [GitHub](https://github.com/poole).
+Some of the projects that I'm currently working on include:
 
-## Setup
+* Migration to [QGIS](http://www.qgis.org) for desktop GIS work;
+* Ongoing development of a [PostgreSQL](http://www.postgresql.org) geographic database using [PostGIS](http://www.postgis.net);
+* Implementation of a [GeoServer](http://geoserver.org) geospatial data server in an enterprise setting; and
+* Development of a number of web-maps using the popular [Leaflet](http://leafletjs.com) and [OpenLayers](http://openlayers.org) JavaScript libraries.
 
-Some fun facts about the setup of this project include:
-
-* Built for [Jekyll](http://jekyllrb.com)
-* Developed on GitHub and hosted for free on [GitHub Pages](https://pages.github.com)
-* Coded with [Sublime Text 2](http://sublimetext.com), an amazing code editor
-* Designed and developed while listening to music like [Blood Bros Trilogy](https://soundcloud.com/maddecent/sets/blood-bros-series)
-
-Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/poole/issues/new) or [ask me on Twitter](https://twitter.com/mdo).
+Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/jamesgardiner/issues/new) or [ask me on Twitter](https://twitter.com/James_G87).
 
 Thanks for reading!
