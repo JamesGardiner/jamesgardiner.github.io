@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: page_nocomments
 title: About me
 ---
 
