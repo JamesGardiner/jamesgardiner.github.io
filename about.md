@@ -4,14 +4,13 @@ title: About me
 ---
 
 <p class="message">
-  Hi, this is a personal blog that I'm using to capture some of my work on open geospatial software such as QGIS, Leaflet or OpenLayers. Occasionally I'll look to include some Python as well.
+  Hi, this is a personal blog that I'm using to capture some of my work on open source geospatial software such as QGIS, Leaflet or OpenLayers. Occasionally I'll look to include some Python as well.
 </p>
 
 My background is in environmental science and remote sensing - I studied Geography as an undergraduate at Swansea University and then went on to complete an MSc By Research in Glaciology, which focused on the use of Synthetic Aperture Radar (SAR) for the detection of surface change processes on Arctic ice-caps.
 
 I am now a Senior Statistical Consultant working for a medium-sized business based in Cardiff, South Wales. I mainly deal with web-based information systems using proprietary software, but more and more am turning to open source solutions to meet customer needs.
 
-Outside of work I get to look after a pair of twin boys that I'm lucky enough to call my own (number 3 is on the way!) who keep me busy with all the usual kid related activities!
 ## Current Projects
 
 Some of the projects that I'm currently working on include:

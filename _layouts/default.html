@@ -2,6 +2,7 @@
 <html lang="en-us">
 	
   {% include google_analytics.html %}
+  <script src='/javascripts/{{ js_file }}.js' type="text/javascript"></script>
   {% include head.html %}
 
   <body>
@@ -20,15 +21,15 @@
           </h3>
         </div>
       </div>
-
       <div class="container content">
 	    {{ content | split: '<!-- more -->' | first }}
+	    {% include twitter.html %}
 	    {% include disquss.html %}
       </div>
     </div>
 
     <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-
+	
     <script>
       (function(document) {
         var toggle = document.querySelector('.sidebar-toggle');
