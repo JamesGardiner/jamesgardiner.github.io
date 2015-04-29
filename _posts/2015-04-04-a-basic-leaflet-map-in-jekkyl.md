@@ -1,6 +1,7 @@
 ---
 layout: post
 title: A basic Leaflet.js map in Jekyll
+permalink: a-basic-leaflet-map-in-jekyll
 custom_css: leaflet
 custom_js: leaflet
 ---
@@ -109,4 +110,4 @@ L.tileLayer('http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png', 
 }).addTo(map);
 </script>
  
-Whilst a pretty easy way to get something like this up and running, I haven't seen any other GitHub based Jekyll blogs with 'slippy' maps, so hopefully this will serve as a tutorial for anyone who wants to do that. Whilst this is a pretty basic map display, I hope to get further walkthroughs up showing more of the functionality in Leaflet and other open source GIS software.
+This is an easy way to get a Leaflet.js map up and running on a GitHub hosted Jekyll blog.  I'm hoping to get more walkthroughs up showing further functionality of Leaflet and other open source GIS software, soon.
