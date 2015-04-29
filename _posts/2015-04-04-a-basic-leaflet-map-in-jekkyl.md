@@ -1,8 +1,6 @@
 ---
 layout: post
 title: A basic Leaflet.js map in Jekyll
-permalink: a-basic-leaflet-map-in-jekyll
-redirect_from: "/2015/04/04/a-basic-leaflet-map-in-jekkyl/"
 custom_css: leaflet
 custom_js: leaflet
 ---
