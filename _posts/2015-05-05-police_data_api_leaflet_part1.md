@@ -1,5 +1,5 @@
 ---
-layout: post_nocomments
+layout: post
 title: Using the data.police.uk API with Leaflet
 permalink: blog/police_data_api_in_leaflet_part1
 custom_js: [leaflet, jquery_2.1.4.min, geojson.min]
