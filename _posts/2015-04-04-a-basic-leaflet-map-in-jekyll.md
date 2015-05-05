@@ -43,7 +43,7 @@ This will create a `dist` folder where you will find a `leaflet-source.js` file,
 	cp path/to/leaflist/dist/leaflet.css css/
 	cp path/to/leaflet/dist/leaflet.js javascript/
 	
-To include these in a jekyll blog post, I have used the method outlined by [Matt Gemmell](http://mattgemmell.com/page-specific-assets-with-jekyll/), where the post YAML should include:
+To include these in a jekyll blog post, I have used the method outlined by [Matt Gemmell](http://mattgemmell.com/page-specific-assets-with-jekyll/), where the post YAML front matter should include:
 	
 ```yaml
 

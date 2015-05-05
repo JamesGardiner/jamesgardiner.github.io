@@ -103,6 +103,8 @@
   
   <ul>
     
+    <li><a href="/blog/police_data_api_in_leaflet_part1">Using the data.police.uk API with Leaflet</a></li>
+    
     <li><a href="/blog/a-basic-leaflet-map-in-jekyll">A basic Leaflet.js map in Jekyll</a></li>
     
   </ul>
@@ -184,7 +186,7 @@ mkdir css
 cp path/to/leaflist/dist/leaflet.css css/
 cp path/to/leaflet/dist/leaflet.js javascript/
 </code></pre></div>
-<p>To include these in a jekyll blog post, I have used the method outlined by <a href="http://mattgemmell.com/page-specific-assets-with-jekyll/">Matt Gemmell</a>, where the post YAML should include:</p>
+<p>To include these in a jekyll blog post, I have used the method outlined by <a href="http://mattgemmell.com/page-specific-assets-with-jekyll/">Matt Gemmell</a>, where the post YAML front matter should include:</p>
 <div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
 <span class="l-Scalar-Plain">custom_css</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">leaflet</span>
 <span class="l-Scalar-Plain">custom_js</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">leaflet</span>
@@ -245,6 +247,15 @@ L.tileLayer('http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png', 
   <h2>Related Posts</h2>
   <ul class="related-posts">
     
+      <li>
+        <h3>
+          <a href="/blog/police_data_api_in_leaflet_part1">
+            Using the data.police.uk API with Leaflet
+            <small>05 May 2015</small>
+          </a>
+        </h3>
+      </li>
+    
   </ul>
 </div>
 
@@ -267,6 +278,11 @@ L.tileLayer('http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png', 
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <div class="footer">
+          <p>
+          &copy; 2015. All rights reserved.
+          </p>
+        </div>
       </div>
     </div>
 

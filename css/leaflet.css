@@ -97,6 +97,9 @@
 	position: relative;
 	z-index: 7;
 	pointer-events: auto;
+	text-align: right;
+	direction: ltr;
+	width: auto;
 	}
 .leaflet-top,
 .leaflet-bottom {
@@ -117,7 +120,7 @@
 	left: 0;
 	}
 .leaflet-control {
-	float: left;
+	float: right;
 	clear: both;
 	}
 .leaflet-right .leaflet-control {
