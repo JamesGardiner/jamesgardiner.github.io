@@ -7,7 +7,6 @@ var forcesJSON;
 var forces;
 var neighbourhoods;
 var areaLayer;
-var i;
 
 // create the map object and set the cooridnates of the initial view:
 var map = L.map('map').setView([51.4833, -3.1833], 10);
@@ -99,7 +98,7 @@ var updateNeighbourhoods = function (name) {
 	neighbourhoods = [];
 	
 	//find the force id for the api call
-	for (i in forces) {
+	for (var i in forces) {
   		if (forces[i].name === force) {
 			var id = forces[i].id;
 		};
@@ -142,7 +141,7 @@ var neighbourhoodChanged = function() {
 	
 	//compare the name of the 'hood to get the id
 	for (i in neighbourhoods) {
-		if (html_entity_decode(neighbourhoods[i].name) === html_entity_decode(hood)) {
+		if (neighbourhoods[i].name === hood) {
 			var id = [];
 			id[0] = neighbourhoods[i].id;
 		};
@@ -150,7 +149,7 @@ var neighbourhoodChanged = function() {
 		
 	//compare the name of the force to get the id
 	var force = $("#forcesList").val();
-	for (i in forces) {
+	for (var i in forces) {
   		if (forces[i].name === force) {
 			id[1] = forces[i].id;
 		};

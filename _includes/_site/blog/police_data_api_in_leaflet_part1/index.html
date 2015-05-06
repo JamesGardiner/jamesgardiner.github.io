@@ -29,10 +29,6 @@
     
       <script src='/javascript/geojson.min.js' type="text/javascript"></script>
     
-      <script src='/javascript/html_entity_decode.js' type="text/javascript"></script>
-    
-      <script src='/javascript/get_html_translation_table.js' type="text/javascript"></script>
-    
   
   
   <!-- CSS -->
@@ -174,14 +170,14 @@ map in a Jekyll blog, I thought it would be useful to show off some of Leaflet&#
 
 <!--more-->
 
-<p>The site makes police recorded crime data available through its API (If you&#39;re unfamiliar with APIs then check out
+<p>The data.police.uk site makes police recorded crime data available through the site&#39;s API (If you&#39;re unfamiliar with APIs then check out
 <a href="http://benjyw.com/post/26966201626/apis-explained">this</a> post by Benjy Weinberger), which powers quite a few web and mobile apps 
-(such as the <a href="http://www.crime-statistics.co.uk/postcode">UK Crime statistics</a> site). It&#39;s a standard JSON web service, 
+such as the <a href="http://www.crime-statistics.co.uk/postcode">UK Crime statistics</a> site. It&#39;s a standard JSON web service, 
 using HTTP GET and POST requests, and is relatively well documented <a href="data.police.uk/docs">here</a>. </p>
 
 <p>There are three high level methods in the data.police.uk API docs, broken down into <em>Force related</em>, <em>Crime related</em> and
-<em>Neighbourhood related</em>. As there are more than a few neighbourhoods in England &amp; Wales, I&#39;m going to make users choose a Police Force first,
-and then a neighbourhood within that force.</p>
+<em>Neighbourhood related</em>. As there are a lot of neighbourhoods in England &amp; Wales, I&#39;m going to make users choose a Police Force first,
+and then a neighbourhood. I&#39;ll follow this up in part 2 with a geocoded postcode search.</p>
 
 <p>To get a list of forces, we can use <code>https://data.police.uk/api/forces</code> which returns a JSON object.</p>
 
@@ -431,7 +427,7 @@ then adds the layer.</p>
         <span class="p">};</span>
     <span class="p">};</span>
 </code></pre></div>
-<p>Here is the final map, with the two drop down selections available, <a href="http://jamesgardiner.github.io/maps/police_api_01">here</a> is a full screen example:</p>
+<p>Here is the final map, with the two drop down selections available, <a href="%22jamesgardiner.github.io/maps/police_api_01">here</a> is a full screen example:</p>
 
 <div id="map" class="map leaflet-container" style="height: 500px; position:relative;"></div>
 
@@ -479,7 +475,7 @@ I&#39;ll follow this post up shortly, where I&#39;ll add a geocoder to the map d
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <div class="footer">
           <p>
-          &copy; James Gardiner 2015. All rights reserved.
+          &copy; 2015. All rights reserved.
           </p>
         </div>
       </div>

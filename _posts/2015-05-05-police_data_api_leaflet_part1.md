@@ -2,7 +2,7 @@
 layout: post
 title: Using the data.police.uk API with Leaflet
 permalink: blog/police_data_api_in_leaflet_part1
-custom_js: [leaflet, jquery_2.1.4.min, geojson.min]
+custom_js: [leaflet, jquery_2.1.4.min, geojson.min, html_entity_decode, get_html_translation_table]
 custom_css: [leaflet, custom_dropdown]
 ---
 
@@ -13,14 +13,14 @@ The first part of this post is a walkthrough covering the steps taken to get a '
 
 -----
 <!--more-->
-The data.police.uk site makes police recorded crime data available through the site's API (If you're unfamiliar with APIs then check out
+The site makes police recorded crime data available through its API (If you're unfamiliar with APIs then check out
 [this](http://benjyw.com/post/26966201626/apis-explained) post by Benjy Weinberger), which powers quite a few web and mobile apps 
-such as the [UK Crime statistics](http://www.crime-statistics.co.uk/postcode) site. It's a standard JSON web service, 
+(such as the [UK Crime statistics](http://www.crime-statistics.co.uk/postcode) site). It's a standard JSON web service, 
 using HTTP GET and POST requests, and is relatively well documented [here](data.police.uk/docs). 
 
 There are three high level methods in the data.police.uk API docs, broken down into *Force related*, *Crime related* and
-*Neighbourhood related*. As there are a lot of neighbourhoods in England & Wales, I'm going to make users choose a Police Force first,
-and then a neighbourhood. I'll follow this up in part 2 with a geocoded postcode search.
+*Neighbourhood related*. As there are more than a few neighbourhoods in England & Wales, I'm going to make users choose a Police Force first,
+and then a neighbourhood within that force.
 
 To get a list of forces, we can use ```https://data.police.uk/api/forces``` which returns a JSON object.
 
@@ -285,7 +285,7 @@ then adds the layer.
 	};
 ```
 
-Here is the final map, with the two drop down selections available, [here]("jamesgardiner.github.io/maps/police_api_01) is a full screen example:
+Here is the final map, with the two drop down selections available, [here](http://jamesgardiner.github.io/maps/police_api_01) is a full screen example:
 
 <div id="map" class="map leaflet-container" style="height: 500px; position:relative;"></div>
 <script src='/javascript/police_api_tutorial1.js' type="text/javascript"></script>
