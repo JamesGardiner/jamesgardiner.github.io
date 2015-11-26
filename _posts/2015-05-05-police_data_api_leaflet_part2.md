@@ -14,7 +14,7 @@ I also use a clustering method to aggregate the crime data to a single point at 
 -----
 <!--more-->
 
-My [previous post](http://jamesgardiner.github.io/blog/police_data_api_in_leaflet_part1/) looked at querying 
+My [previous post](http://jamesgardiner.github.io/blog/police_data_api_in_leaflet_part1/) looked at querying
 the data.police.uk API to get police neighbourhood boundaries displayed in a leaflet map. By adding a geocoder,
 users can ENTER postcodes, street names or place names to look up crime data, which helps if they aren't sure
 what police neighbourhood or police force they live in.
@@ -42,7 +42,7 @@ Then create a geocoder object using the mapbox.places geocoder index ID and add 
 		'mapbox.places', {
 		autocomplete: true
 	});
-	
+
 	//add it to the map
 	geocoderControl.addTo(map);
 ```
@@ -55,21 +55,21 @@ selects one of the autocomplete options listed in the geocoder.
 
 ```javascript
 	geocoderControl.on('select', function(res) {
-	
+
 	//get the lat lon
     var latlng = (res.feature.center);
-	
+
 	//construct the url to call the neighbourhood boundary
 	var url = "https://data.police.uk/api/locate-neighbourhood?"
 		+ "q=" + latlng[1] + "," + latlng[0];
-		
+
 	$.getJSON(url, function(data) {
 		if ( data ) {
 			//add a new marker at the lat lon of postcode centroid
 			var marker = L.marker([latlng[1], latlng[0]]);
 			markers.addLayer(marker);
 			map.addLayer(markers);
-			
+
 			loadBoundary(data.force, data.neighbourhood);
 		};
 	});
@@ -93,19 +93,19 @@ neighbourhoodChanged function and from the callback function in the geocoder eve
 var loadBoundary = function (forceID, neighbourhoodID) {
 	var latlng = [];
 	var url = "https://data.police.uk/api/" + forceID + "/" + neighbourhoodID + "/boundary";
-	
+
 	$.getJSON(url, function(data) {
-		
+
 		//create an array of boundary lat lon pairs
 		$.each(data, function(i, item){
 			latlng.push(new L.LatLng(data[i].latitude, data[i].longitude));
 		});
-		
+
 		//if a layer is already present, remove it
 		if ( areaLayer ) {
 			map.removeLayer(areaLayer);
 		};
-		
+
 		//create a new polygon object using the latlng array
 	   	areaLayer = new L.Polygon(latlng, {
 	        clickable: true,
@@ -113,12 +113,12 @@ var loadBoundary = function (forceID, neighbourhoodID) {
 			opacity: 0.4,
 			fillOpacity: 0.1
 	    });
-		
+
 		//redraw the map to the bounds of the new polygon
 		map.fitBounds(areaLayer.getBounds());
 		//add the polygon to the map
 		areaLayer.addTo(map);
-		
+
 		getStreetCrimes(latlng);
 	});
 };
@@ -134,23 +134,23 @@ A callback function is implemented, so that a successful query fires the addCrim
 
 ```javascript
 var getStreetCrimes = function (polygon, date) {
-	
+
 	var data = '';
-	
+
 	var url = 'https://data.police.uk/api/crimes-street/all-crime';
-	
+
 	$.each(polygon, function(i, item){
 		data += polygon[i].lat + ',' + polygon[i].lng + ':';
 	});
-	
-	if (typeof date !== 'undefined') { 
+
+	if (typeof date !== 'undefined') {
 		data += '&date=' + date;
 	} else {
 		data = data.substring(0, data.length - 1);
 	};
-	
+
 	data = "poly=" + data + "&date=2015-03";
-	
+
 	$.post( url, data, function( crimes ) {
 	 addCrimeLayer(crimes);
 	});
@@ -172,27 +172,27 @@ before creating a new marker for that object, adding this as a layer to the ```c
 
 ```javascript
 	var addCrimeLayer = function (crimes){
-	
+
 	crime_markers.clearLayers();
-	
+
 	for (var i = 0; i < crimes.length; i++) {
         var a = crimes[i];
-		var content = "<p>Category:	" + a.category + 
+		var content = "<p>Category:	" + a.category +
 			"<br /> Location:	" + a.location.street.name;
-			
+
         var crime_marker = L.marker(new L.LatLng(a.location.latitude, a.location.longitude), {
             icon: L.mapbox.marker.icon({
 				'marker-color': '9C9E99'
 			}),
        	});
-		   
+
 		crime_markers.addLayer(crime_marker);
         crime_marker.bindPopup(content);
-		
+
     }
-	
+
 	map.addLayer(crime_markers);
-	
+
 };
 ```
 Whilst not perfect (e.g. force name and neighbourhood name don't update when the geocoder is used)

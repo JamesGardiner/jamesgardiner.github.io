@@ -1,12 +1,15 @@
 # Dependencies
-markdown:            redcarpet
+markdown: redcarpet
+redcarpet:
+  extensions: ["tables", "fenced_code_blocks"]
 highlighter:         pygments
+gems:                [jekyll-paginate]
 
 # Permalinks
 #
 # Use of `relative_permalinks` ensures post links from the index work properly.
 permalink:           pretty
-relative_permalinks: true
+#relative_permalinks: true
 
 # Setup
 title:               James Gardiner

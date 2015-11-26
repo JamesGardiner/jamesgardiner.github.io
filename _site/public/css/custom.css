@@ -10,10 +10,14 @@
 	padding: 1.5rem;
 }
 
-.sidebar-logo img {
+.gravatar-logo img {
 	border-radius: 50%;
 	-moz-border-radius: 50%;
 	-webkit-border-radius: 50%;
 	width: 160px;
 	margin: 0 auto;
+}
+
+p {
+    text-align:justify;
 }

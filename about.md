@@ -9,7 +9,7 @@ title: About me
 
 My background is in environmental science and remote sensing - I studied Geography as an undergraduate at Swansea University and then went on to complete an MSc By Research in Glaciology, which focused on the use of Synthetic Aperture Radar (SAR) for the detection of surface change processes on Arctic ice-caps.
 
-I am now a Senior Statistical Consultant working for a medium-sized business based in Cardiff, South Wales. I mainly deal with web-based information systems using proprietary software, but more and more am turning to open source solutions to meet customer needs.
+I am now a Senior Consultant working for a medium-sized business based in Cardiff, South Wales. I mainly deal with web-based information systems using proprietary software, but more and more am turning to open source solutions to meet customer needs.
 
 ## Current Projects
 
