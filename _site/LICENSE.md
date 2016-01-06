@@ -1,3 +1,12 @@
+The following directories and their contents are Copyright James Gardiner. You may not reuse anything therein without my permission:
+
+- about.md
+- _drafts/
+- _posts/
+- images/
+
+All other directories and files are MIT Licensed, unless stated otherwise.
+
 # Released under MIT License
 
 Copyright (c) 2014 Mark Otto.
