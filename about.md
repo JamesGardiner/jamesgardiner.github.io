@@ -4,21 +4,18 @@ title: About me
 ---
 
 <p class="message">
-  Hi, this is a personal blog that I'm using to capture some of my work on open source geospatial software such as QGIS, Leaflet or OpenLayers. Occasionally I'll look to include some Python as well.
+  Hi! This is a blog that I'm using to capture some of my work as a Data Developer, as well as some thoughts on more generic topics.
 </p>
 
-My background is in environmental science and remote sensing - I studied Geography as an undergraduate at Swansea University and then went on to complete an MSc By Research in Glaciology, which focused on the use of Synthetic Aperture Radar (SAR) for the detection of surface change processes on Arctic ice-caps.
+My background is in environmental science and remote sensing - I read Geography as an undergraduate at [Swansea University](www.swasnea.ac.uk) and then studied for an MSc By Research in Glaciology, focussing on the the detection of surface change processes on Arctic ice-caps using Synthetic Aperture Radar (SAR). I've also worked extensively in the public sector (mainly local government) focusing on the use of data to improve services.
 
-I am now a Senior Consultant working for a medium-sized business based in Cardiff, South Wales. I mainly deal with web-based information systems using proprietary software, but more and more am turning to open source solutions to meet customer needs.
+I now work as a Data Developer for [Nesta](http://www.nesta.org.uk/), using data from across the [data spectrum](https://theodi.org/data-spectrum) to help inform innovation policy across Wales.
 
 ## Current Projects
 
-Some of the projects that I'm currently working on include:
+Here's a list of projects i'm currently working on:
 
-* Migration to [QGIS](http://www.qgis.org) for desktop GIS work;
-* Ongoing development of a [PostgreSQL](http://www.postgresql.org) geographic database using [PostGIS](http://www.postgis.net);
-* Implementation of a [GeoServer](http://geoserver.org) geospatial data server in an enterprise setting; and
-* Development of a number of web-maps using the popular [Leaflet](http://leafletjs.com) and [OpenLayers](http://openlayers.org) JavaScript libraries.
+* Development of an innovation dashboard for Wales (*Arloesiadur*) using new and novel data.
 
 Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/jamesgardiner/issues/new) or [ask me on Twitter](https://twitter.com/James_G87).
 
