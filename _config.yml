@@ -1,8 +1,8 @@
 # Dependencies
-markdown: redcarpet
-redcarpet:
-  extensions: ["tables", "fenced_code_blocks"]
-highlighter:         pygments
+markdown: kramdown
+kramdown:
+  input: GFM
+highlighter:         rouge
 gems:                [jekyll-paginate]
 
 # Permalinks
