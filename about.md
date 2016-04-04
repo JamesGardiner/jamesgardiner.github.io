@@ -11,11 +11,11 @@ My background is in environmental science and remote sensing - I read Geography 
 
 I now work as a Data Developer for [Nesta](http://www.nesta.org.uk/), using data from across the [data spectrum](https://theodi.org/data-spectrum) to help inform innovation policy across Wales.
 
-## Current Projects
+### Current Projects
 
 Here's a list of projects i'm currently working on:
 
-* Development of an innovation dashboard for Wales (*Arloesiadur*) using new and novel data.
+* Development of an [innovation dashboard for Wales](http://www.nesta.org.uk/blog/arloesiadur-innovation-analytics-experiment) (*Arloesiadur*) using new and novel data.
 
 Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/jamesgardiner/issues/new) or [ask me on Twitter](https://twitter.com/James_G87).
 
