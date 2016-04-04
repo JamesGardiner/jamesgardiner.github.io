@@ -13,9 +13,9 @@ permalink:           pretty
 
 # Setup
 title:               James Gardiner
-tagline:             'Another FOSS4G site'
-description:         'A site about open source geospatial software - QGIS, PostGIS, Leaflet, OpenLayers and Python'
-url:                 jamesgardiner.github.io
+tagline:             'A personal data analysis repo'
+description:         'A site for my analyses, findings, musings and other helpful tidbits.'
+url:                 jgardiner.co.uk
 baseurl:             /
 paginate:            5
 
