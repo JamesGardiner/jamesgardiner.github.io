@@ -24,15 +24,11 @@ In any case, to get the data I used the following methodology.
 2. Install [python-fitbit](https://github.com/orcasgit/python-fitbit) to whatever Python environment you work in. At the time of writing, I needed to install from master on github rather than PyPi due to issues with OAUTH2 authentication. This may be released by the time you read this.
 3. Run the `gather_keys_oauth2.py` script available in the repo, passing it the client id and client secret for your app (which are available on the manage my apps page of the Fitbit site). Save the access token and refresh tokens in a file. I used a simple JSON file called tokens.json with the format:
 
-``` 
-
-{
-  "ACCESS_TOKEN": "YOURACCESSTOKEN",
-  "CLIENT_SECRET": "YOURCLIENTSECRET",
-  "REFRESH_TOKEN": "YOURREFRESHTOKEN",
-  "CLIENT_ID": "YOURCLIENTID"
-}
-
-```
+        {
+          "ACCESS_TOKEN": "YOURACCESSTOKEN",
+          "CLIENT_SECRET": "YOURCLIENTSECRET",
+          "REFRESH_TOKEN": "YOURREFRESHTOKEN",
+          "CLIENT_ID": "YOURCLIENTID"
+        }
 
 4. 
