@@ -13,8 +13,8 @@ permalink:           pretty
 
 # Setup
 title:               James Gardiner
-tagline:             'A personal data analysis repo'
-description:         'A site for my analyses, findings, musings and other helpful tidbits.'
+tagline:             'A blog for all things data'
+description:         'A site for my analyses, findings, musings and other helpful stuff.'
 url:                 jgardiner.co.uk
 baseurl:             /
 paginate:            5
@@ -25,7 +25,7 @@ author:
   url:               https://twitter.com/James_G87
   email:             jamesg87@me.com
   github:            jamesGardiner
-  twitter:           James_G87
+  twitter:           _JamesRG
   linkedin:          jrgardiner
   email_md5:         64efb4611c5f7a0f48d81a92c61e64e4
 
