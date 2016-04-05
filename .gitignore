@@ -2,4 +2,5 @@ ite/
 .gitignore
 .sass-cache/
 .jekyll-metadata
+*.sublime-project
 
