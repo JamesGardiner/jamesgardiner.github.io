@@ -54,11 +54,11 @@ The basic flow is:
 
 This then allows you to slice, dice and resample the data using time periods and dates, for example going from all the data:
 
-![All recorded heart beats](/assets/all_hr.png)
+![All recorded heart beats](/img/all_hr.png)
 
 to daily means:
 
-![Average heart rate and resting heart rate](/assets/avg_hr.png)
+![Average heart rate and resting heart rate](/img/avg_hr.png)
 
 is just one line of code:
 

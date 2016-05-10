@@ -1,0 +1,846 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.2">Jekyll</generator><link href="http://jgardiner.co.uk/feed.xml" rel="self" type="application/atom+xml" /><link href="http://jgardiner.co.uk/" rel="alternate" type="text/html" /><updated>2016-05-10T11:08:30+01:00</updated><id>http://jgardiner.co.uk/</id><title>James Gardiner</title><subtitle>A blog about data, analysis, and geography</subtitle><entry><title>Jupyter Progress Bars</title><link href="http://jgardiner.co.uk/blog/jupyter_progress_bar" rel="alternate" type="text/html" title="Jupyter Progress Bars" /><published>2016-05-03T00:00:00+01:00</published><updated>2016-05-03T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/jupyter-progress-bar</id><content type="html" xml:base="http://jgardiner.co.uk/blog/jupyter_progress_bar">&lt;p&gt;Jupyter notebooks have a number of built in widgets that can be used to enhance a notebooks functionality and appearance. One of these is the &lt;code class=&quot;highlighter-rouge&quot;&gt;FloatProgress&lt;/code&gt; widget, which creates an updateable visual progress bar.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;I was recently batch geocoding a large number of address strings inside a Jupyter notebook, and was looking for an easy visual way to track the progress of this operation, which is run as a &lt;code class=&quot;highlighter-rouge&quot;&gt;pandas.Series.map()&lt;/code&gt; method.&lt;/p&gt;
+
+&lt;p&gt;My first thought was &lt;a href=&quot;https://pypi.python.org/pypi/tqdm&quot;&gt;tqdm&lt;/a&gt;, &lt;em&gt;“A Fast, Extensible Progress Meter”&lt;/em&gt; for Python, though from what I can see it doesn’t offer the ability to work with Panda’s Series objects (but it &lt;a href=&quot;https://github.com/tqdm/tqdm/blob/master/examples/pandas_progress_apply.py&quot;&gt;can be used with &lt;code class=&quot;highlighter-rouge&quot;&gt;pandas.DataFrame.apply()&lt;/code&gt; methods&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Not wanting to print and update a string, a bit of searching threw up &lt;a href=&quot;https://www.reddit.com/r/Python/comments/34tdr2/a_simple_progress_bar_for_ipython_notebooks/&quot;&gt;this&lt;/a&gt; thread, the final comment of which shows how to implement a progress bar widget in Jupyter. The syntax in this comment is now deprecated but essentially all that is needed is to import the &lt;code class=&quot;highlighter-rouge&quot;&gt;FloatProgress&lt;/code&gt; class from &lt;code class=&quot;highlighter-rouge&quot;&gt;ipywidgets&lt;/code&gt; and the &lt;code class=&quot;highlighter-rouge&quot;&gt;display&lt;/code&gt; method from the &lt;code class=&quot;highlighter-rouge&quot;&gt;IPython.display&lt;/code&gt; module:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;ipywidgets&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FloatProgress&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;IPython.display&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;display&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then create a &lt;code class=&quot;highlighter-rouge&quot;&gt;FloatProgress&lt;/code&gt; object with the relevant min and max values and display it below the selected cell:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FloatProgress&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The bar can be updated by setting the f.value variable:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Other keyword arguments for FloatProgress object include &lt;code class=&quot;highlighter-rouge&quot;&gt;step&lt;/code&gt; which controls the step (obviously!), &lt;code class=&quot;highlighter-rouge&quot;&gt;description&lt;/code&gt; which sets the bar’s name and &lt;code class=&quot;highlighter-rouge&quot;&gt;bar_style&lt;/code&gt; which sets the color of the bar. More info can be found at the &lt;a href=&quot;https://github.com/ipython/ipywidgets&quot;&gt;ipywidgets GitHub page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is a simple, easy and very quick way to get a progress bar up and running in Jupyter.&lt;/p&gt;</content><summary>Jupyter notebooks have a number of built in widgets that can be used to enhance a notebooks functionality and appearance. One of these is the FloatProgress widget, which creates an updateable visual progress bar.</summary></entry><entry><title>Connecting to Postrges with Pandas and Jupyter</title><link href="http://jgardiner.co.uk/blog/read_sql_pandas" rel="alternate" type="text/html" title="Connecting to Postrges with Pandas and Jupyter" /><published>2016-04-18T00:00:00+01:00</published><updated>2016-04-18T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/read-sql-pandas</id><content type="html" xml:base="http://jgardiner.co.uk/blog/read_sql_pandas">&lt;p&gt;One of my main activities at the moment is the collection and storage of web data from a number of sources, which is being stored in an AWS RDS PostgreSQL server. Unfortunately, none of the team I’m working with have used PostgreSQL before, certainly not through an AWS instance and definitely not through a Jupyter notebook and Pandas, though they do have a fair bit of experience using Pandas/R for centralized data analysis using flat file, such as CSVs.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;To show them how to do this, I put together a quick notebook showing how easy it is to do, and thought it would port over well to a short blog post.&lt;/p&gt;
+
+&lt;h3 id=&quot;config-files&quot;&gt;Config Files&lt;/h3&gt;
+&lt;p&gt;First thing to do is setup a config file. This allows you to keep information you don’t want to share private, but means you don’t have to constantly enter passwords, usernames, host URLs and other such tedious details!&lt;/p&gt;
+
+&lt;p&gt;There’s a few ways to do this type of thing (including using environment variables), but my preference here is to save a JSON formatted config.json file in the same directory that the notebook server is started in. I use the following format:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;database&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;db_name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;schema&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;schema_name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;user_name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;host&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;host_url&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;port&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;port_num&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;passw&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;user_password&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Obviously the values need to be changed to match your own. This can be read by using:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;json&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;config.json&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;which returns a python dict object with the keys specified in the JSON document. We can use these to construct a connection string to use with psycopg2:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;conn_str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;host={} dbname={} user={} password={}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;passw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;which is then passed to the psycopg2.connect method as the only parameter:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;psycopg2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conn_str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To read this in to Pandas as a dataframe is simple (swap &lt;code class=&quot;highlighter-rouge&quot;&gt;table_name&lt;/code&gt; for the relevant table:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pd&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;select * from table_name&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;con&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;If the table is large, Pandas offers the ability to iterate over the database by specifying the &lt;code class=&quot;highlighter-rouge&quot;&gt;chunksize&lt;/code&gt; keyword argument, where &lt;code class=&quot;highlighter-rouge&quot;&gt;chunksize&lt;/code&gt; is the number of rows to include in each chunk. The example below iterates over a table 5000 rows at time, and can squeeze some bigger databases into a dataframe:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DataFrame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chunk&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;select * from table_name&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;con&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chunksize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chunk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Obviously, if the database is too large even when represented in memory, then you will have to try another approach, such as implementing a workflow using specific tools such as &lt;a href=&quot;http://blaze.pydata.org/pages/overview/&quot;&gt;Blaze&lt;/a&gt;.&lt;/p&gt;</content><summary>One of my main activities at the moment is the collection and storage of web data from a number of sources, which is being stored in an AWS RDS PostgreSQL server. Unfortunately, none of the team I’m working with have used PostgreSQL before, certainly not through an AWS instance and definitely not through a Jupyter notebook and Pandas, though they do have a fair bit of experience using Pandas/R for centralized data analysis using flat file, such as CSVs.</summary></entry><entry><title>Fitbit Data Analysis</title><link href="http://jgardiner.co.uk/blog/fitbit-data-analysis" rel="alternate" type="text/html" title="Fitbit Data Analysis" /><published>2016-04-03T00:00:00+01:00</published><updated>2016-04-03T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/fitbit-heart-rate-analysis</id><content type="html" xml:base="http://jgardiner.co.uk/blog/fitbit-data-analysis">&lt;p&gt;For Christmas I was lucky enough to get a &lt;a href=&quot;https://www.fitbit.com/uk/chargehr&quot;&gt;Fitbit Charge HR&lt;/a&gt; from my wife. The fact that I’d previously asked for one to ‘do data analysis on’ slightly mystified and amused her, but she still went ahead and suprised me with it!&lt;/p&gt;
+
+&lt;p&gt;I’ve been hoping to use the monitor as a way to personalise an analysis of data, to see how the results feel when they relate to me (and especially my health), rather than some data that are abstract from me as an indivdual. If at the same time I can view my own health through new tools, then it’s a bonus.&lt;/p&gt;
+
+&lt;p&gt;Here I outline how I go about storing and analysing the heart rate data generated by the device using Postgres, Pandas and a Jupyter notebook.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;!--more--&gt;
+
+&lt;h3 id=&quot;charge-hr&quot;&gt;Charge HR&lt;/h3&gt;
+
+&lt;p&gt;In terms of sensors, the Charge HR is well equipped: it has an optical heart rate monitor, a 3-axis accelerometer and an altimeter. These produce high resolution heart rate (hr) data, length of time asleep (and quality of sleep), floors climbed and an estimate of the number of minutes the wearer is ‘active’ for a day. This is all pretty comprehensive, but for this post I’m focussing on my hr data, and in particular what Fitbit calls &lt;em&gt;intraday&lt;/em&gt; data, which are heart rate data at up to 1 second resolution.&lt;/p&gt;
+
+&lt;h3 id=&quot;accessing-the-data&quot;&gt;Accessing the Data&lt;/h3&gt;
+&lt;p&gt;There are two ways to get access to intraday data. Either pay $49.99 a year on a &lt;a href=&quot;https://www.fitbit.com/premium/export&quot;&gt;Fitbit Premium subscription&lt;/a&gt; which allows export of the data in CSV format, or gather the data using &lt;a href=&quot;https://dev.fitbit.com/docs/heart-rate/&quot;&gt;Fitbit’s API&lt;/a&gt;. Obviously I’m not going to pay to get data when I can do the same for free, but I think there are some questions to be asked about requiring paid access to your own personally generated data if you lack the technical skills to gather them through an API.&lt;/p&gt;
+
+&lt;p&gt;In any case, to get the data I used the following method.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Sign up for the Fitbit API and register a ‘personal’ type app. The important aspects here are ensuring the &lt;em&gt;Browser&lt;/em&gt; app type is selected and the callback url is set to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://127.0.0.1:8080/&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Install &lt;a href=&quot;https://github.com/orcasgit/python-fitbit&quot;&gt;python-fitbit&lt;/a&gt; into whatever Python environment you’re working with. At the time of writing, I needed to install from master on github rather than PyPi due to issues with OAUTH2 authentication. The fixed version may be released by the time you read this post.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Run the &lt;code class=&quot;highlighter-rouge&quot;&gt;gather_keys_oauth2.py&lt;/code&gt; script available in the repo, passing it the client id and client secret for your app (which are available on the manage my apps page of the Fitbit site). Save the access token and refresh tokens in a file. I used a simple JSON file called tokens.json with the format:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ACCESS_TOKEN&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;YOURACCESSTOKEN&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;CLIENT_SECRET&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;YOURCLIENTSECRET&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;REFRESH_TOKEN&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;YOURREFRESHTOKEN&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;CLIENT_ID&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;YOURCLIENTID&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+ &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;4.Clone my &lt;a href=&quot;https://github.com/JamesGardiner/heart-rate-analysis&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;heart_rate_analysis&lt;/code&gt;&lt;/a&gt; repo, and run the &lt;code class=&quot;highlighter-rouge&quot;&gt;setup_hr_db.py&lt;/code&gt; script. This requires postgres and a database called &lt;code class=&quot;highlighter-rouge&quot;&gt;fitbit&lt;/code&gt; (though you can change the &lt;code class=&quot;highlighter-rouge&quot;&gt;connection_string&lt;/code&gt; to something else if you want, the script relies on SQLAlchemy). I’m using Postgres as I wanted to try mixing SQL and JSON in a single database. If you’ve saved a &lt;code class=&quot;highlighter-rouge&quot;&gt;tokens.json&lt;/code&gt; file in the same directory as this script, it will read in your keys from there, otherwise specify their location in main().&lt;/p&gt;
+
+&lt;h3 id=&quot;analysis-in-jupyter-with-pandas&quot;&gt;Analysis in Jupyter with Pandas&lt;/h3&gt;
+&lt;p&gt;I looked at the data using the ubiquitous &lt;a href=&quot;http://jupyter.org/&quot;&gt;Jupyter Notebooks&lt;/a&gt;, and I’ve saved the basic investigative analyses I’ve done on these data to the repo in the link above (click through to see the rendered noteboom on GitHub.&lt;/p&gt;
+
+&lt;p&gt;The basic flow is:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Connect to the db using &lt;a href=&quot;http://initd.org/psycopg/&quot;&gt;psycopg2&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Using SQL, expand the JSON Arrays to individual JSON values:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; SELECT r_hr,
+        DATE,
+        Jsonb_array_elements(hr) #&amp;gt; &#39;{time}&#39;  AS TIME,
+        Jsonb_array_elements(hr) #&amp;gt; &#39;{value}&#39; AS value
+ FROM heart_rate
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Read these into &lt;a href=&quot;http://pandas.pydata.org/&quot;&gt;pandas&lt;/a&gt; as a dataframe&lt;/li&gt;
+  &lt;li&gt;Reset the index as datetime objects&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This then allows you to slice, dice and resample the data using time periods and dates, for example going from all the data:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/all_hr.png&quot; alt=&quot;All recorded heart beats&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;to daily means:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/avg_hr.png&quot; alt=&quot;Average heart rate and resting heart rate&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;is just one line of code:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Resample to day using mean&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;dfrsmpl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resample&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;D&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;how&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;mean&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;If you’ve cloned my repo, you can use &lt;a href=&quot;https://github.com/JamesGardiner/heart-rate-analysis/blob/master/heart_rate_analysis.ipynb&quot;&gt;this notebook&lt;/a&gt; to run the same analyses on your own data.&lt;/p&gt;
+
+&lt;h3 id=&quot;next-steps&quot;&gt;Next steps&lt;/h3&gt;
+&lt;p&gt;I don’t have much in the way of a time series yet, and it will be interesting to see how my heart rate changes over time (especially in relation to periods of the year where I’ll be doing more or less exercise, i.e. Christmas).&lt;/p&gt;
+
+&lt;p&gt;Obviously this is only one aspect of the data collected by the Charge HR, and it might be possible to look at correlations between other data and my heart rate, but at the moment, I don’t have any hard plans to do huge amounts of analysis on what is really a pet project. If that changes, I’ll add some further blog posts.&lt;/p&gt;</content><summary>For Christmas I was lucky enough to get a Fitbit Charge HR from my wife. The fact that I’d previously asked for one to ‘do data analysis on’ slightly mystified and amused her, but she still went ahead and suprised me with it!</summary></entry><entry><title>Using the data.police.uk API with Leaflet - part 2</title><link href="http://jgardiner.co.uk/blog/police_data_api_in_leaflet_part2" rel="alternate" type="text/html" title="Using the data.police.uk API with Leaflet - part 2" /><published>2015-05-05T00:00:00+01:00</published><updated>2015-05-05T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/police_data_api_leaflet_part2</id><content type="html" xml:base="http://jgardiner.co.uk/blog/police_data_api_in_leaflet_part2">&lt;p&gt;In this post I put a geocoder on the map, so that users can find street level crimes by postcode or place name.
+I also use a clustering method to aggregate the crime data to a single point at higher zoom levels.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;My &lt;a href=&quot;http://jamesgardiner.github.io/blog/police_data_api_in_leaflet_part1/&quot;&gt;previous post&lt;/a&gt; looked at querying
+the data.police.uk API to get police neighbourhood boundaries displayed in a leaflet map. By adding a geocoder,
+users can ENTER postcodes, street names or place names to look up crime data, which helps if they aren’t sure
+what police neighbourhood or police force they live in.&lt;/p&gt;
+
+&lt;p&gt;In this post I’m using the &lt;a href=&quot;https://www.mapbox.com/mapbox.js/api/v2.1.9/l-mapbox-geocoder/&quot;&gt;mapbox geocoder&lt;/a&gt; API,
+but others are available such as the &lt;a href=&quot;https://developers.google.com/maps/documentation/geocoding/&quot;&gt;Google Geocoding API&lt;/a&gt;
+and the &lt;a href=&quot;https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find.htm&quot;&gt;ArcGIS Geocoding API&lt;/a&gt;. With the free MapBox
+geocoding service, any results must be displayed on a MapBox map, so if implementing
+elsewhere just be sure to check what map you’re actually displaying your results on. If you’re paying for enterprise level geocoding you can use the results
+anywhere.&lt;/p&gt;
+
+&lt;p&gt;To start, add the following js and css files to the head of the html file. These allow access to the MarkerCluster plugin.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js
+	https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css
+	https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then create a geocoder object using the mapbox.places geocoder index ID and add it to the map.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;c1&quot;&gt;//create a geocoder&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;geocoderControl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mapbox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;geocoderControl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+		&lt;span class=&quot;s1&quot;&gt;&#39;mapbox.places&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;na&quot;&gt;autocomplete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+	&lt;span class=&quot;c1&quot;&gt;//add it to the map&lt;/span&gt;
+	&lt;span class=&quot;nx&quot;&gt;geocoderControl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Using the mapbox.places ID allows you to make 1 geocode per request and to cache any results for up
+to 30 days.&lt;/p&gt;
+
+&lt;p&gt;Next, add an event listener to the geocoderControl which is fired when a user
+selects one of the autocomplete options listed in the geocoder.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;nx&quot;&gt;geocoderControl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;select&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+	&lt;span class=&quot;c1&quot;&gt;//get the lat lon&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+	&lt;span class=&quot;c1&quot;&gt;//construct the url to call the neighbourhood boundary&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://data.police.uk/api/locate-neighbourhood?&quot;&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;q=&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;,&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+	&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getJSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;c1&quot;&gt;//add a new marker at the lat lon of postcode centroid&lt;/span&gt;
+			&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;marker&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;marker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]);&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;markers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;marker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;markers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+			&lt;span class=&quot;nx&quot;&gt;loadBoundary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;force&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;neighbourhood&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This returns a GeoJSON object from which the latitude and longitude of the center
+can be found using &lt;code class=&quot;highlighter-rouge&quot;&gt;(res.feature.center)&lt;/code&gt;. This is then used in a jQuery call to the
+police.uk locate-neighbourhood method.&lt;/p&gt;
+
+&lt;p&gt;The jQuery.getJSON method allows for a callback function to be put in place. This is used
+to check the return contains data, to add a standard leaflet marker to
+the map at the correct latitude and longitude, and finally to call the loadBoundary function
+from part 1 of this post with the force name and neighbourhood name as parameters.&lt;/p&gt;
+
+&lt;p&gt;To make it easier to load neighbourhood boundaries, some of the code in the neighbourhoodChanged
+function from part 1 is stripped out and becomes its own function, which is now called from both the
+neighbourhoodChanged function and from the callback function in the geocoder event listener.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;loadBoundary&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;forceID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;neighbourhoodID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://data.police.uk/api/&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;forceID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;neighbourhoodID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/boundary&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+	&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getJSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+		&lt;span class=&quot;c1&quot;&gt;//create an array of boundary lat lon pairs&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;LatLng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;latitude&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;longitude&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+		&lt;span class=&quot;c1&quot;&gt;//if a layer is already present, remove it&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;removeLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+		&lt;span class=&quot;c1&quot;&gt;//create a new polygon object using the latlng array&lt;/span&gt;
+	   	&lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Polygon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	        &lt;span class=&quot;na&quot;&gt;clickable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;na&quot;&gt;opacity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;na&quot;&gt;fillOpacity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;
+	    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+		&lt;span class=&quot;c1&quot;&gt;//redraw the map to the bounds of the new polygon&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fitBounds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getBounds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+		&lt;span class=&quot;c1&quot;&gt;//add the polygon to the map&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+		&lt;span class=&quot;nx&quot;&gt;getStreetCrimes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;At the end of this function, a new function called getStreetCrimes is called, which takes the
+neighbourhood polygon as a custom area and an optional date parameter in &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM&lt;/code&gt; format
+and uses jQuery.post to &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; the custom area and date data to the police.uk API.
+In this instance &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; is used over &lt;code class=&quot;highlighter-rouge&quot;&gt;GET&lt;/code&gt; due to &lt;code class=&quot;highlighter-rouge&quot;&gt;GET&lt;/code&gt; having a URL character limit of 4,094
+, which can easily be exceeded when using latitude longitude pairs for a neighbourhood boundary.&lt;/p&gt;
+
+&lt;p&gt;A callback function is implemented, so that a successful query fires the addCrimeLayer function, which is again a new function.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;getStreetCrimes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;polygon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;https://data.police.uk/api/crimes-street/all-crime&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+	&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;polygon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;polygon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;lat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;,&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;polygon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;lng&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;:&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;undefined&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&amp;amp;date=&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;substring&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+	&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;poly=&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;amp;date=2015-03&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+	&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crimes&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	 &lt;span class=&quot;nx&quot;&gt;addCrimeLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;crimes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The addCrimeLayer works on a Leaflet MarkerClusterGroup, defined
+towards the start of the javascript.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;c1&quot;&gt;//create crime cluster marker&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crime_markers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;MarkerClusterGroup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It first clears any existing layers, then for each object in the &lt;code class=&quot;highlighter-rouge&quot;&gt;crimes&lt;/code&gt;
+array, defined the objects category and the street name to which the crime was attributed
+before creating a new marker for that object, adding this as a layer to the &lt;code class=&quot;highlighter-rouge&quot;&gt;crime_markers&lt;/code&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;MarkerClusterGroup&lt;/code&gt; and binding a popup to it with the street name and crime category.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;addCrimeLayer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;crimes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+
+	&lt;span class=&quot;nx&quot;&gt;crime_markers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;clearLayers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+	&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crimes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crimes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+		&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;p&amp;gt;Category:	&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+			&lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br /&amp;gt; Location:	&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;location&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;street&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crime_marker&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;marker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;LatLng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;location&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;latitude&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;location&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;longitude&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;icon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mapbox&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;marker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;icon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+				&lt;span class=&quot;s1&quot;&gt;&#39;marker-color&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;9C9E99&#39;&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;}),&lt;/span&gt;
+       	&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+		&lt;span class=&quot;nx&quot;&gt;crime_markers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;crime_marker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;crime_marker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bindPopup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;crime_markers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Whilst not perfect (e.g. force name and neighbourhood name don’t update when the geocoder is used)
+this is a good example of how easy it is to use Leaflet to display geographic data, even when there
+are high densities of points. Also, it’s great to see the &lt;a href=&quot;http://police.uk&quot;&gt;police.uk&lt;/a&gt; site putting all
+of this data out there as Open Data under an &lt;a href=&quot;http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/licensing-for-re-use/&quot;&gt;Open Government License&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;A full screen map is available &lt;a href=&quot;/maps/police_api_02&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;div id=&quot;map&quot; class=&quot;map leaflet-container&quot; style=&quot;height: 500px; position:relative;&quot;&gt;&lt;/div&gt;
+&lt;script src=&quot;/javascript/police_api_tutorial2.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</content><summary>In this post I put a geocoder on the map, so that users can find street level crimes by postcode or place name.
+I also use a clustering method to aggregate the crime data to a single point at higher zoom levels.</summary></entry><entry><title>Using the data.police.uk API with Leaflet</title><link href="http://jgardiner.co.uk/blog/police_data_api_in_leaflet_part1" rel="alternate" type="text/html" title="Using the data.police.uk API with Leaflet" /><published>2015-05-05T00:00:00+01:00</published><updated>2015-05-05T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/police_data_api_leaflet_part1</id><content type="html" xml:base="http://jgardiner.co.uk/blog/police_data_api_in_leaflet_part1">&lt;p&gt;Following on from my previous &lt;a href=&quot;http://jamesgardiner.github.io/blog/a-basic-leaflet-map-in-jekyll/&quot;&gt;post&lt;/a&gt; on setting up a Leaflet 
+map in a Jekyll blog, I thought it would be useful to show off some of Leaflet’s functionality using real world data.&lt;/p&gt;
+
+&lt;p&gt;The first part of this post is a walkthrough covering the steps taken to get a ‘Neighbourhoods’ boundary visible on a Leaflet map, via a few dropdowns and the &lt;a href=&quot;data.police.uk&quot;&gt;data.police.uk&lt;/a&gt; site.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;!--more--&gt;
+&lt;p&gt;The site makes police recorded crime data available through its API (If you’re unfamiliar with APIs then check out
+&lt;a href=&quot;http://benjyw.com/post/26966201626/apis-explained&quot;&gt;this&lt;/a&gt; post by Benjy Weinberger), which powers quite a few web and mobile apps 
+(such as the &lt;a href=&quot;http://www.crime-statistics.co.uk/postcode&quot;&gt;UK Crime statistics&lt;/a&gt; site). It’s a standard JSON web service, 
+using HTTP GET and POST requests, and is relatively well documented &lt;a href=&quot;data.police.uk/docs&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;There are three high level methods in the data.police.uk API docs, broken down into &lt;em&gt;Force related&lt;/em&gt;, &lt;em&gt;Crime related&lt;/em&gt; and
+&lt;em&gt;Neighbourhood related&lt;/em&gt;. As there are more than a few neighbourhoods in England &amp;amp; Wales, I’m going to make users choose a Police Force first,
+and then a neighbourhood within that force.&lt;/p&gt;
+
+&lt;p&gt;To get a list of forces, we can use &lt;code class=&quot;highlighter-rouge&quot;&gt;https://data.police.uk/api/forces&lt;/code&gt; which returns a JSON object.&lt;/p&gt;
+
+&lt;p&gt;To select a specific force, we can add a dropdown to our map by 
+extending the Leaflet &lt;a href=&quot;http://leafletjs.com/reference.html#control&quot;&gt;Control class&lt;/a&gt; with the 
+following code:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ForceControl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Control&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+		&lt;span class=&quot;na&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	    	&lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Util&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setOptions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+	    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+		
+		&lt;span class=&quot;c1&quot;&gt;//function to be called when the control is added to the map&lt;/span&gt;
+	    &lt;span class=&quot;na&quot;&gt;onAdd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			
+			&lt;span class=&quot;c1&quot;&gt;//create the control container with a &lt;/span&gt;
+			&lt;span class=&quot;c1&quot;&gt;//class name&lt;/span&gt;
+	        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;DomUtil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;div&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;force-control&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+			
+			&lt;span class=&quot;c1&quot;&gt;//create a list of available police force names and ids&lt;/span&gt;
+			&lt;span class=&quot;c1&quot;&gt;//using the data.police.uk api Forces method inside the &lt;/span&gt;
+			&lt;span class=&quot;c1&quot;&gt;//&#39;force&#39; global variable.&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;forces&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+			
+			&lt;span class=&quot;c1&quot;&gt;//jquery method to retrieve JSON object&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getJSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://data.police.uk/api/forces&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+				&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+					
+					&lt;span class=&quot;c1&quot;&gt;//create the htmlString that will form the&lt;/span&gt;
+					&lt;span class=&quot;c1&quot;&gt;//innerHTML of the forces dropdown&lt;/span&gt;
+					&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;htmlString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&amp;lt;select id=forcesList &#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+						&lt;span class=&quot;s1&quot;&gt;&#39;onchange=&quot;updateNeighbourhoods()&quot;&amp;gt;&amp;lt;option&amp;gt;&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
+						&lt;span class=&quot;s1&quot;&gt;&#39;Select a Force&amp;lt;/option&amp;gt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+					
+					&lt;span class=&quot;c1&quot;&gt;//create individual force &amp;lt;option&amp;gt; tags within the&lt;/span&gt;
+					&lt;span class=&quot;c1&quot;&gt;//&amp;lt;select&amp;gt; tag&lt;/span&gt;
+					&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+			        	&lt;span class=&quot;nx&quot;&gt;forces&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+						&lt;span class=&quot;nx&quot;&gt;htmlString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;htmlString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&amp;lt;option&amp;gt;&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
+							&lt;span class=&quot;nx&quot;&gt;forces&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&amp;lt;/option&amp;gt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			    	&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+					
+					&lt;span class=&quot;c1&quot;&gt;//close the select tag&lt;/span&gt;
+					&lt;span class=&quot;nx&quot;&gt;htmlString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&amp;lt;/select&amp;gt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+					
+					&lt;span class=&quot;c1&quot;&gt;//update the dropdown list innerHTML &lt;/span&gt;
+					&lt;span class=&quot;c1&quot;&gt;//with the list of forces&lt;/span&gt;
+					&lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;innerHTML&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;htmlString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+					
+					&lt;span class=&quot;c1&quot;&gt;//allow a user to select a single option&lt;/span&gt;
+		    		&lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;firstChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;onmousedown&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 
+						&lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;firstChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ondblclick&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 
+							&lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;DomEvent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stopPropagation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+							
+				&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+			
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To update the list of neighbourhoods in the selected force we name a function in the innerHTML, 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;updateNeighbourhoods()&lt;/code&gt; that listens for an &lt;code class=&quot;highlighter-rouge&quot;&gt;onChange&lt;/code&gt; event. This means that whenever a new
+force is selected, the function is called. Before we cover that though, lets add a new dropdown to the map,
+with a standard placeholder text instead of a neighbourhood name:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;c1&quot;&gt;//extend the L.Control class to create a custom drop down box&lt;/span&gt;
+	&lt;span class=&quot;c1&quot;&gt;// initially with simple placeholder text&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;NeighbourhoodControl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Control&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+		&lt;span class=&quot;na&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;placeholder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	        &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Util&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setOptions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+		
+		&lt;span class=&quot;c1&quot;&gt;//once added to the map div, carry out the following&lt;/span&gt;
+		&lt;span class=&quot;na&quot;&gt;onAdd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			
+			&lt;span class=&quot;c1&quot;&gt;//create the control container with a particular&lt;/span&gt;
+			&lt;span class=&quot;c1&quot;&gt;//class name&lt;/span&gt;
+	        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;DomUtil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+				&lt;span class=&quot;s1&quot;&gt;&#39;div&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;neighbourhoods_control&#39;&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+			
+			&lt;span class=&quot;c1&quot;&gt;//add the following to the innerHTML&lt;/span&gt;
+			&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;htmlString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&amp;lt;select id=&quot;neighbourhoodsList&quot;&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+				&lt;span class=&quot;s1&quot;&gt;&#39;onchange=&quot;neighbourhoodChanged()&quot;&amp;gt;&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
+				&lt;span class=&quot;s1&quot;&gt;&#39;&amp;lt;option&amp;gt;Select a police force&amp;lt;/option&amp;gt;&amp;lt;/select&amp;gt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			
+			&lt;span class=&quot;c1&quot;&gt;//make this the div&#39;s innerHTML&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;innerHTML&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;htmlString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			
+			&lt;span class=&quot;c1&quot;&gt;//allow a user to select a single option&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;firstChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;onmousedown&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 
+				&lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;firstChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ondblclick&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 
+					&lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;DomEvent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stopPropagation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Both these controls can then be added:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addControl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ForceControl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;forcesList&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;topright&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+		
+	&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addControl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;NeighbourhoodControl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;neighbourhoodList&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;topright&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To update the innerHTML of this div dynamically, we can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;updateNeighbourhoods()&lt;/code&gt;
+ function that we call whenever a new police force is selected:&lt;/p&gt;
+
+&lt;p&gt;```javascript
+ 	//update the current list of neighbourhoods using the selected 
+ 	//force id
+	var updateNeighbourhoods = function (name) {&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//get the force name
+var force = $(&quot;#forcesList&quot;).val()
+
+//empty the neighbourhoods array
+neighbourhoods = [];
+
+//find the force id for the api call
+for (var i in forces) {
+  		if (forces[i].name === force) {
+		var id = forces[i].id;
+	};
+};
+
+//if the id is matched successfully then get a list of 
+//neighbourhoods in that force area.
+if (id) {
+	
+	//url to retrieve a list of neighbourhoods
+	var url = &quot;https://data.police.uk/api/&quot; + 
+		id + &quot;/neighbourhoods&quot;;
+	
+	//jquery function to get the JSON object
+	$.getJSON(url, function(data) {
+		
+		//create the html string to be used as the div&#39;s 
+		//inner HTML
+		var htmlString = &#39;&amp;lt;select id=&quot;neighbourhoodsList&quot;&amp;gt;&#39; + 
+			&#39;&amp;lt;option&amp;gt;Select a police force&amp;lt;/option&amp;gt;&#39;;
+		
+		//loop through the JSON object
+		$.each(data, function(i, item){
+			
+			//add each to an array
+    		neighbourhoods[i] = item;
+			
+			//create an &amp;lt;option&amp;gt; tag for each element in
+			//the JSON object
+			htmlString = htmlString + &#39;&amp;lt;option&amp;gt;&#39; + 
+				neighbourhoods[i].name + 
+					&#39;&amp;lt;/option&amp;gt;&#39;;
+		});
+		
+		//add a closing &amp;lt;/select&amp;gt; tag
+		htmlString = htmlString + &#39;&amp;lt;/select&amp;gt;&#39;;
+		
+		//use the div id to update the innerHTML
+		$(&quot;#neighbourhoodsList&quot;).html(htmlString);
+		
+		//reorder the options
+		$(&quot;#neighbourhoodsList&quot;).
+			html($(&quot;#neighbourhoodsList option&quot;).
+				sort(function (a, b) {
+					return a.text == b.text ? 0 : 
+						a.text &amp;lt; b.text ? -1 : 1
+		}));
+		
+		//Prepend a placeholder so that onchange 
+		//is fired when user selects a neighbourhood
+		$(&#39;#neighbourhoodsList&#39;).
+			prepend($(&#39;&amp;lt;option&amp;gt;Select a neighbourhood&amp;lt;/option&amp;gt;&#39;));	
+	});
+	
+} else {
+	
+	//retain the original placeholder text, or reset it
+	$(&quot;#neighbourhoodsList&quot;).html(&#39;&amp;lt;select id=&#39; +
+		&#39;&quot;neighbourhoodsList&quot;&amp;gt;&amp;lt;option&amp;gt;Select a &#39; +
+			&#39;neighbourhood&amp;lt;/option&amp;gt;&amp;lt;/select&amp;gt;&#39;);
+	
+	};
+}; ```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The final thing to add is a function that is called when a neighbourhood is selected.
+This queries the API for the selected neighbourhood boundary (which is returned as standard JSON rather than
+GeoJSON), gets the bounding box of the boundary, automatically recenters and zooms to the specified position
+then adds the layer.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;c1&quot;&gt;//function called when the selected neighbourhood is changed&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;neighbourhoodChanged&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	
+		&lt;span class=&quot;c1&quot;&gt;//get the selected &#39;hood name&lt;/span&gt;
+		&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;hood&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;#neighbourhoodsList&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+		
+		&lt;span class=&quot;c1&quot;&gt;//compare the name of the &#39;hood to get the id&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;neighbourhoods&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;neighbourhoods&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;hood&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+				&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;neighbourhoods&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+			
+		&lt;span class=&quot;c1&quot;&gt;//compare the name of the force to get the id&lt;/span&gt;
+		&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;force&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;#forcesList&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;forces&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	  		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;forces&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;force&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;forces&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+		
+		&lt;span class=&quot;c1&quot;&gt;//if we match both the force and &#39;hood then&lt;/span&gt;
+		&lt;span class=&quot;c1&quot;&gt;//carry on, else break&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+			&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://data.police.uk/api/&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt; 
+				&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/boundary&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			
+			&lt;span class=&quot;c1&quot;&gt;//jquery to get the JSON&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getJSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				
+				&lt;span class=&quot;c1&quot;&gt;//create an array of boundary lat lon pairs&lt;/span&gt;
+				&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+					&lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;LatLng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;latitude&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+						&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;longitude&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+				
+				&lt;span class=&quot;c1&quot;&gt;//if a layer is already present, remove it&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+					&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;removeLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+				
+				&lt;span class=&quot;c1&quot;&gt;//create a new polygon object using the latlng array&lt;/span&gt;
+		       	&lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Polygon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;latlng&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		            &lt;span class=&quot;na&quot;&gt;clickable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+					&lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+					&lt;span class=&quot;na&quot;&gt;opacity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+					&lt;span class=&quot;na&quot;&gt;fillOpacity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;
+		        &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+				
+				&lt;span class=&quot;c1&quot;&gt;//redraw the map to the bounds of the new polygon&lt;/span&gt;
+				&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fitBounds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getBounds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+				&lt;span class=&quot;c1&quot;&gt;//add the polygon to the map&lt;/span&gt;
+		    	&lt;span class=&quot;nx&quot;&gt;areaLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+					
+			&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Here is the final map, with the two drop down selections available, &lt;a href=&quot;http://jamesgardiner.github.io/maps/police_api_01&quot;&gt;here&lt;/a&gt; is a full screen example:&lt;/p&gt;
+
+&lt;div id=&quot;map&quot; class=&quot;map leaflet-container&quot; style=&quot;height: 500px; position:relative;&quot;&gt;&lt;/div&gt;
+&lt;script src=&quot;/javascript/police_api_tutorial1.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;That’s a pretty long post, but I hope it gives you an idea of how we can tap into the police API, which we’ve only really scratched the surface of.
+I’ll follow this post up shortly, where I’ll add a geocoder to the map div that takes postcodes and placenames and focuses the map on the relevant area.&lt;/p&gt;</content><summary>Following on from my previous post on setting up a Leaflet 
+map in a Jekyll blog, I thought it would be useful to show off some of Leaflet’s functionality using real world data.</summary></entry><entry><title>A basic Leaflet.js map in Jekyll</title><link href="http://jgardiner.co.uk/blog/a-basic-leaflet-map-in-jekyll" rel="alternate" type="text/html" title="A basic Leaflet.js map in Jekyll" /><published>2015-04-04T00:00:00+01:00</published><updated>2015-04-04T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/a-basic-leaflet-map-in-jekyll</id><content type="html" xml:base="http://jgardiner.co.uk/blog/a-basic-leaflet-map-in-jekyll">&lt;p&gt;In this post I walk through the steps I took to get a working Leaflet.js map in a Jekyll blog post.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;!--more--&gt;
+&lt;p&gt;I’ve recently started to develop lightweight and responsive apps using Leaflet as opposed to the more heavyweight and fully featured &lt;a href=&quot;www.http://openlayers.org&quot;&gt;OpenLayers&lt;/a&gt; library. That isn’t to say that OpenLayers isn’t a great library; in fact, it’s been around quite some time and is incredibly feature rich. Leaflet however, is more than capable of fulfilling the requirements of most web-mapping projects (and it helps that I find Leaflet a lot quicker to develop with).&lt;/p&gt;
+
+&lt;p&gt;According to its homepage &lt;a href=&quot;http://http://leafletjs.com&quot;&gt;Leaflet.js&lt;/a&gt; is a modern open-source JavaScript library for mobile-friendly interactive maps. It comes in at around 33 KB of JavaScript when built, and it has most of the features most developers will ever need for online mapping.&lt;/p&gt;
+
+&lt;h3 id=&quot;including-leaflet-in-jekyll&quot;&gt;Including Leaflet in Jekyll&lt;/h3&gt;
+
+&lt;p&gt;Before displaying a Leaflet map in our post, we first have to include the leaflet.js and leaflet.css files in the site, and there are two main ways to achieve this. The first is to include the following code in the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;head&amp;gt;&lt;/code&gt; section of the HTML code:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The second is to &lt;a href=&quot;https://github.com/Leaflet/Leaflet/releases&quot;&gt;download&lt;/a&gt; the Leaflet source code from the Leaflet &lt;a href=&quot;https://github.com/Leaflet/Leaflet&quot;&gt;GitHub repository&lt;/a&gt;. This then needs to be built using Node.js. Run the following commands (assuming you have already &lt;a href=&quot;http://nodejs.org/&quot;&gt;installed Node.js on your machine&lt;/a&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install -g jake
+npm install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You may need to run these using sudo. Once installed, &lt;code class=&quot;highlighter-rouge&quot;&gt;cd&lt;/code&gt; into the &lt;code class=&quot;highlighter-rouge&quot;&gt;/Leaflet&lt;/code&gt; directory that your downloaded files are saved in and run the command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jake build
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will create a &lt;code class=&quot;highlighter-rouge&quot;&gt;dist&lt;/code&gt; folder where you will find a &lt;code class=&quot;highlighter-rouge&quot;&gt;leaflet-source.js&lt;/code&gt; file, a minified &lt;code class=&quot;highlighter-rouge&quot;&gt;leaflet.js&lt;/code&gt; file for deployment as well as a &lt;code class=&quot;highlighter-rouge&quot;&gt;leaflet.css&lt;/code&gt; file. These now need to be accessible to your jekyll build, so &lt;code class=&quot;highlighter-rouge&quot;&gt;cd&lt;/code&gt; into your &lt;code class=&quot;highlighter-rouge&quot;&gt;username.github.io&lt;/code&gt; folder that contains your jekyll site and run the following commands:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir javascript
+mkdir css
+
+cp path/to/leaflist/dist/leaflet.css css/
+cp path/to/leaflet/dist/leaflet.js javascript/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To include these in a jekyll blog post, I have used the method outlined by &lt;a href=&quot;http://mattgemmell.com/page-specific-assets-with-jekyll/&quot;&gt;Matt Gemmell&lt;/a&gt;, where the post YAML front matter should include:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;custom_css&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;leaflet&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;custom_js&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;leaflet&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;and then include the following in the post’s &lt;code class=&quot;highlighter-rouge&quot;&gt;HEAD&lt;/code&gt;:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;  {% if page.custom_js %}
+    {% for js_file in page.custom_js %}	
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;/javascript/{{ js_file }}.js&#39;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt; 
+    {% endfor %}
+{% endif %}
+
+{% if page.custom_css %}
+    {% for stylesheet in page.custom_css %}
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/css/{{ stylesheet }}.css&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;media=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;screen&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/css&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    {% endfor %}
+{% endif %}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Then I add a div to the post which will contain the map:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;map&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;map leaflet-container&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;height: 500px; position:relative;&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;followed by this &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;script&amp;gt;&lt;/code&gt; tag:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// create the map object and set the cooridnates of the initial view:
+&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;map&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;51.4833&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;3.1833&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// create the tile layer with correct attribution:
+&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tileLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;attribution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Map data &amp;amp;copy; &amp;lt;a href=&quot;http://openstreetmap.org&quot;&amp;gt;OpenStreetMap&amp;lt;/a&amp;gt; contributors, &amp;lt;a href=&quot;http://creativecommons.org/licenses/by-sa/2.0/&quot;&amp;gt;CC-BY-SA&amp;lt;/a&amp;gt;, Imagery © &amp;lt;a href=&quot;http://mapbox.com&quot;&amp;gt;Mapbox&amp;lt;/a&amp;gt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;maxZoom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;18&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;which initialises the map object, sets the coordinates of the initial view, sets the zoom layer and finally uses &lt;code class=&quot;highlighter-rouge&quot;&gt;L.tileLayer&lt;/code&gt; to call a tile layer from MapBox and add it to the map.&lt;/p&gt;
+
+&lt;div id=&quot;map&quot; class=&quot;map leaflet-container&quot; style=&quot;height: 500px; position:relative;&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+// create the map object and set the cooridnates of the initial view:
+var map = L.map(&#39;map&#39;).setView([51.4833, -3.1833], 10);
+
+// create the tile layer with correct attribution:
+L.tileLayer(&#39;http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png&#39;, {
+    attribution: &#39;Map data &amp;copy; &lt;a href=&quot;http://openstreetmap.org&quot;&gt;OpenStreetMap&lt;/a&gt; contributors, &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/2.0/&quot;&gt;CC-BY-SA&lt;/a&gt;, Imagery © &lt;a href=&quot;http://mapbox.com&quot;&gt;Mapbox&lt;/a&gt;&#39;,
+    maxZoom: 18
+}).addTo(map);
+&lt;/script&gt;
+
+&lt;p&gt;This is an easy way to get a Leaflet.js map up and running on a GitHub hosted Jekyll blog.  I’m hoping to get more walkthroughs up showing further functionality of Leaflet and other open source GIS software, soon.&lt;/p&gt;</content><summary>In this post I walk through the steps I took to get a working Leaflet.js map in a Jekyll blog post.
+
+
+
+I’ve recently started to develop lightweight and responsive apps using Leaflet as opposed to the more heavyweight and fully featured OpenLayers library. That isn’t to say that OpenLayers isn’t a great library; in fact, it’s been around quite some time and is incredibly feature rich. Leaflet however, is more than capable of fulfilling the requirements of most web-mapping projects (and it helps that I find Leaflet a lot quicker to develop with).
+
+According to its homepage Leaflet.js is a modern open-source JavaScript library for mobile-friendly interactive maps. It comes in at around 33 KB of JavaScript when built, and it has most of the features most developers will ever need for online mapping.
+
+Including Leaflet in Jekyll
+
+Before displaying a Leaflet map in our post, we first have to include the leaflet.js and leaflet.css files in the site, and there are two main ways to achieve this. The first is to include the following code in the &amp;lt;head&amp;gt; section of the HTML code:
+
+
+&amp;lt;link rel=&quot;stylesheet&quot; href=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css&quot; /&amp;gt;
+
+&amp;lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+
+
+
+The second is to download the Leaflet source code from the Leaflet GitHub repository. This then needs to be built using Node.js. Run the following commands (assuming you have already installed Node.js on your machine):
+
+npm install -g jake
+npm install
+
+
+
+You may need to run these using sudo. Once installed, cd into the /Leaflet directory that your downloaded files are saved in and run the command
+
+jake build
+
+
+
+This will create a dist folder where you will find a leaflet-source.js file, a minified leaflet.js file for deployment as well as a leaflet.css file. These now need to be accessible to your jekyll build, so cd into your username.github.io folder that contains your jekyll site and run the following commands:
+
+mkdir javascript
+mkdir css
+
+cp path/to/leaflist/dist/leaflet.css css/
+cp path/to/leaflet/dist/leaflet.js javascript/
+
+
+
+To include these in a jekyll blog post, I have used the method outlined by Matt Gemmell, where the post YAML front matter should include:
+
+
+---
+custom_css: leaflet
+custom_js: leaflet
+---
+
+
+
+
+and then include the following in the post’s HEAD:
+
+  {% if page.custom_js %}
+    {% for js_file in page.custom_js %}	
+    &amp;lt;script src=&#39;/javascript/{{ js_file }}.js&#39; type=&quot;text/javascript&quot;&amp;gt;&amp;lt;/script&amp;gt; 
+    {% endfor %}
+{% endif %}
+
+{% if page.custom_css %}
+    {% for stylesheet in page.custom_css %}
+    &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;/css/{{ stylesheet }}.css&quot; media=&quot;screen&quot; type=&quot;text/css&quot;&amp;gt;
+    {% endfor %}
+{% endif %}
+
+Then I add a div to the post which will contain the map:
+
+&amp;lt;div id=&quot;map&quot; class=&quot;map leaflet-container&quot; style=&quot;height: 500px; position:relative;&quot;&amp;gt;&amp;lt;/div&amp;gt;
+
+followed by this &amp;lt;script&amp;gt; tag:
+
+&amp;lt;script&amp;gt;
+// create the map object and set the cooridnates of the initial view:
+
+var map = L.map(&#39;map&#39;).setView([51.4833, -3.1833], 10);
+
+// create the tile layer with correct attribution:
+
+L.tileLayer(&#39;http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png&#39;, {
+    attribution: &#39;Map data &amp;amp;copy; &amp;lt;a href=&quot;http://openstreetmap.org&quot;&amp;gt;OpenStreetMap&amp;lt;/a&amp;gt; contributors, &amp;lt;a href=&quot;http://creativecommons.org/licenses/by-sa/2.0/&quot;&amp;gt;CC-BY-SA&amp;lt;/a&amp;gt;, Imagery © &amp;lt;a href=&quot;http://mapbox.com&quot;&amp;gt;Mapbox&amp;lt;/a&amp;gt;&#39;,
+    maxZoom: 18
+}).addTo(map);
+&amp;lt;/script&amp;gt;
+
+which initialises the map object, sets the coordinates of the initial view, sets the zoom layer and finally uses L.tileLayer to call a tile layer from MapBox and add it to the map.
+
+
+
+
+This is an easy way to get a Leaflet.js map up and running on a GitHub hosted Jekyll blog.  I’m hoping to get more walkthroughs up showing further functionality of Leaflet and other open source GIS software, soon.</summary></entry></feed>

@@ -1,55 +1,40 @@
 <!DOCTYPE html>
-<html lang="en-us">
-	
-  {% include google_analytics.html %}
-  {% include head.html %}
+<html lang="en">
 
-  <body class="sidebar-overlay">
+{% include head.html %}
+ {% if page.custom_js %}
+    {% for js_file in page.custom_js %}
+      <script src='/javascript/{{ js_file }}.js' type="text/javascript"></script>
+    {% endfor %}
+  {% endif %}
 
-    {% include sidebar.html %}
+{% if page.cdn_js %}
+  {% for url in page.cdn_js %}
+    <script src={{ url }} type="text/javascript"></script>
+  {% endfor %}
+{% endif %}
 
-    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
-         content to avoid any CSS collisions with our real content. -->
-    <div class="wrap">
-      <div class="masthead">
-        <div class="container">
-          <h3 class="masthead-title">
-            <a href="/" title="Home">{{ site.title }}</a>
-            <br />
-            <small>{{ site.tagline }}</small>
-          </h3>
-        </div>
-      </div>
-      <div class="container content">
-	    {{ content | split: '<!-- more -->' | first }}
-	    {% include twitter.html %}
-	    {% include disquss.html %}
-        <div class="footer">
-          <p>
-          &copy; James Gardiner {{ site.time | date: '%Y' }}. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </div>
+ <!-- CSS -->
+{% if page.custom_css %}
+  {% for stylesheet in page.custom_css %}
+    <link rel="stylesheet" href="/css/{{ stylesheet }}.css" media="screen" type="text/css">
+  {% endfor %}
+{% endif %}
 
-    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-	
-    <script>
-      (function(document) {
-        var toggle = document.querySelector('.sidebar-toggle');
-        var sidebar = document.querySelector('#sidebar');
-        var checkbox = document.querySelector('#sidebar-checkbox');
+{% if page.cdn_css %}
+  {% for url in page.cdn_css %}
+    <link rel="stylesheet" href={{ url }} media="screen" type="text/css">
+  {% endfor %}
+{% endif %}
 
-        document.addEventListener('click', function(e) {
-          var target = e.target;
+<body>
 
-          if(!checkbox.checked ||
-             sidebar.contains(target) ||
-             (target === checkbox || target === toggle)) return;
+    {% include nav.html %}
 
-          checkbox.checked = false;
-        }, false);
-      })(document);
-    </script>
-  </body>
+    {{ content }}
+
+    {% include footer.html %}
+
+</body>
+
 </html>

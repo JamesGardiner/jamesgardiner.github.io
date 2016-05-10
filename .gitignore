@@ -3,4 +3,4 @@ ite/
 .sass-cache/
 .jekyll-metadata
 *.sublime-project
-
+node_modules

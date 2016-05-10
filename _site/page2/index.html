@@ -1,221 +1,208 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
 
-  <!-- google_analytic file -->
+<head>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A blog about data, analysis, and geography">
 
-  ga('create', 'UA-61555722-1', 'auto');
-  ga('send', 'pageview');
+    <title>James Gardiner</title>
 
-</script>
-  <head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="canonical" href="http://jgardiner.co.uk/page2/">
 
-  <!-- Enable responsiveness on mobile devices -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-  
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
 
-  
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
 
-  <!-- CSS -->
-  
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
-  
-  <link rel="stylesheet" href="/public/css/poole.css">
-  <link rel="stylesheet" href="/public/css/lanyon.css">
-  <link rel="stylesheet" href="/public/css/custom.css">
-  <link rel="stylesheet" href="/public/css/syntax.css">
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu:400,400italic,700">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-  <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
-  <link rel="shortcut icon" href="/public/favicon.ico">
+    <link type="application/atom+xml" rel="alternate" href="http://jgardiner.co.uk/feed.xml" title="James Gardiner" />
 
-  <!-- RSS -->
-  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
-
-  <title>
-    
-      James Gardiner
-      A blog for all things data
-    
-  </title>
 </head>
 
-
-  <body>
-
-    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
-     styles, `#sidebar-checkbox` for behavior. -->
-<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
-
-<!-- Toggleable sidebar -->
-<div class="sidebar" id="sidebar">
-  
-  <div class="sidebar-logo">
-    <img src="http://www.gravatar.com/avatar/64efb4611c5f7a0f48d81a92c61e64e4?s=120" />
-  </div>
-
-  <div id="contact-list" style="text-align:center">
-    
-      <a href="https://github.com/jamesGardiner">
-        <span class="fa-stack fa-lg">
-          <i class="fa fa-square-o fa-stack-2x"></i>
-          <i class="fa fa-github-alt fa-stack-1x"></i>
-        </span>
-      </a>
-    
-  
-      <a href="https://twitter.com/_JamesRG">
-        <span class="fa-stack fa-lg">
-          <i class="fa fa-square-o fa-stack-2x"></i>
-          <i class="fa fa-twitter fa-stack-1x"></i>
-        </span>
-      </a>
-    
-
-    
-      <a href="https://linkedin.com/in/jrgardiner">
-        <span class="fa-stack fa-lg">
-          <i class="fa fa-square-o fa-stack-2x"></i>
-          <i class="fa fa-linkedin fa-stack-1x"></i>
-        </span>
-      </a>
-    
-  </div>
-
-  <div class="sidebar-item">
-    <p>A site for my analyses, findings, musings and other helpful stuff.</p>
-  </div>
-  
-  <ul>
-    
-    <li><a href="/blog/read_sql_pandas">Connecting to Postrges with Pandas and Jupyter</a></li>
-    
-    <li><a href="/blog/fitbit-data-analysis">Fitbit Data Analysis</a></li>
-    
-    <li><a href="/blog/flask_app_pt1">A simple data viz app using Flask and D3 - Part 1</a></li>
-    
-    <li><a href="/blog/police_data_api_in_leaflet_part2">Using the data.police.uk API with Leaflet - part 2</a></li>
-    
-    <li><a href="/blog/police_data_api_in_leaflet_part1">Using the data.police.uk API with Leaflet</a></li>
-    
-  </ul>
-
-  <nav class="sidebar-nav">
-    <a class="sidebar-nav-item" href="/">Home</a>
-
-    
-	
-    
-    
-      
-        
-      
-    
-      
-        
-          <a class="sidebar-nav-item" href="/about/">About me</a>
-        
-      
-    
-      
-        
-      
-    
-    <!--<a class="sidebar-nav-item" href="/archive/v1.0.0.zip">Download</a>
-    <a class="sidebar-nav-item" href="">GitHub project</a>
-    <span class="sidebar-nav-item">Currently v1.0.0</span>-->
-  </nav>
-
-  <div class="sidebar-item">
-    <p>
-      &copy; 2016. All rights reserved.
-    </p>
-  </div>
-</div>
+ 
 
 
-    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
-         content to avoid any CSS collisions with our real content. -->
-    <div class="wrap">
-      <div class="masthead">
-        <div class="container">
-          <h3 class="masthead-title">
-            <a href="/" title="Home">James Gardiner</a>
-            <br />
-            <small>A blog for all things data</small>
-          </h3>
+
+ <!-- CSS -->
+
+
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">James Gardiner</a>
         </div>
-      </div>
 
-      <div class="container content">
-	    <div class="posts">
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/blog/a-basic-leaflet-map-in-jekyll">
-        A basic Leaflet.js map in Jekyll
-      </a>
-    </h1>
-    <span class="post-date">04 Apr 2015</span>
-    <p>In this post I walk through the steps I took to get a working Leaflet.js map in a Jekyll blog post.</p>
-
-<hr />
-
-
-    
-  </div>
-  
-</div>
-
-<div class="pagination">
-  
-    <span class="pagination-item older">Older</span>
-  
-  
-    
-      <a class="pagination-item newer" href="/">Newer</a>
-    
-  
-</div>
-      <div class="footer">
-          <p>
-          &copy; James Gardiner 2016. All rights reserved.
-          </p>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+				
+                <li>
+                    <a href="/about/">About</a>
+                </li>
+				
+                
+				
+                <li>
+                    <a href="/contact/">Contact</a>
+                </li>
+				
+                
+            </ul>
         </div>
-      </div>
+        <!-- /.navbar-collapse -->
     </div>
-      </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/svalbard.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>James Gardiner</h1>
+                    <hr class="small">
+                    <span class="subheading">Data + Science = Information</span>
+                </div>
+            </div>
+        </div>
     </div>
+</header>
 
-    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+<!-- Main Content -->
+<div class="container">
+	<div class="row">
+		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+			
+<div class="post-preview">
+    <a href="/blog/a-basic-leaflet-map-in-jekyll">
+        <h2 class="post-title">            A basic Leaflet.js map in Jekyll
+        </h2>
+        
+    </a>
+    <p class="post-meta">Posted by James Gardiner on April 4, 2015</p>
+</div>
+<hr>
 
-    <script>
-      (function(document) {
-        var toggle = document.querySelector('.sidebar-toggle');
-        var sidebar = document.querySelector('#sidebar');
-        var checkbox = document.querySelector('#sidebar-checkbox');
 
-        document.addEventListener('click', function(e) {
-          var target = e.target;
+<!-- Pager -->
 
-          if(!checkbox.checked ||
-             sidebar.contains(target) ||
-             (target === checkbox || target === toggle)) return;
+<ul class="pager">
+    
+    <li class="previous">
+        <a href="/">&larr; Newer Posts</a>
+    </li>
+    
+    
+</ul>
 
-          checkbox.checked = false;
-        }, false);
-      })(document);
-    </script>
-  </body>
+
+		</div>
+	</div>
+</div>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    <li>
+                        <a href="https://twitter.com/_JamesRG">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/jrgardiner">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/JamesGardiner">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="mailto:jamesg87@me.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; James Gardiner 2016</p>
+                <p class="copyright text-muted"><a class="copyright text-muted" href=https://www.flickr.com/photos/nordforsk/16354155134/>Image: "Adventsdalen, Svalbard." (CC BY 2.0) by  NordForsk</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
 </html>

@@ -1,34 +1,22 @@
-# Dependencies
+# Site settings
+title: James Gardiner
+header-img: img/svalbard.jpg
+
+email: jamesg87@me.com
+copyright_name: James Gardiner
+description: "A blog about data, analysis, and geography"
+baseurl: ""
+url: "http://jgardiner.co.uk"
+twitter_username: _JamesRG
+github_username:  JamesGardiner
+linkedin_username:  jrgardiner
+email_username:  jamesg87@me.com
+
+# Build settings
 markdown: kramdown
-kramdown:
-  input: GFM
-highlighter:         rouge
-gems:                [jekyll-paginate]
+highlighter: rouge
+permalink: pretty
+paginate: 5
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
 
-# Permalinks
-#
-# Use of `relative_permalinks` ensures post links from the index work properly.
-permalink:           pretty
-#relative_permalinks: true
-
-# Setup
-title:               James Gardiner
-tagline:             'A blog for all things data'
-description:         'A site for my analyses, findings, musings and other helpful stuff.'
-url:                 jgardiner.co.uk
-baseurl:             /
-paginate:            5
-
-# About/contact
-author:
-  name:              James Gardiner
-  url:               https://twitter.com/James_G87
-  email:             jamesg87@me.com
-  github:            jamesGardiner
-  twitter:           _JamesRG
-  linkedin:          jrgardiner
-  email_md5:         64efb4611c5f7a0f48d81a92c61e64e4
-
-# Custom vars
-version:             1.0.0
-excerpt_separator:   "<!--more-->"
+gems: [jekyll-paginate, jekyll-feed]
