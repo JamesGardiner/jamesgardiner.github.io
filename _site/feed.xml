@@ -1,4 +1,122 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.2">Jekyll</generator><link href="http://jgardiner.co.uk/feed.xml" rel="self" type="application/atom+xml" /><link href="http://jgardiner.co.uk/" rel="alternate" type="text/html" /><updated>2016-05-10T20:47:46+01:00</updated><id>http://jgardiner.co.uk/</id><title>James Gardiner</title><subtitle>A blog about data, analysis, and geography</subtitle><entry><title>Jupyter Progress Bars</title><link href="http://jgardiner.co.uk/blog/jupyter_progress_bar" rel="alternate" type="text/html" title="Jupyter Progress Bars" /><published>2016-05-03T00:00:00+01:00</published><updated>2016-05-03T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/jupyter-progress-bar</id><content type="html" xml:base="http://jgardiner.co.uk/blog/jupyter_progress_bar">&lt;p&gt;Jupyter notebooks have a number of built in widgets that can be used to enhance a notebooks functionality and appearance. One of these is the &lt;code class=&quot;highlighter-rouge&quot;&gt;FloatProgress&lt;/code&gt; widget, which creates an updateable visual progress bar.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.2">Jekyll</generator><link href="http://jgardiner.co.uk/feed.xml" rel="self" type="application/atom+xml" /><link href="http://jgardiner.co.uk/" rel="alternate" type="text/html" /><updated>2016-06-29T16:28:39+01:00</updated><id>http://jgardiner.co.uk/</id><title>James Gardiner</title><subtitle>A blog about data, analysis, and geography</subtitle><entry><title>Setting up Python on Ubuntu</title><link href="http://jgardiner.co.uk/blog/ubuntu_python_setup" rel="alternate" type="text/html" title="Setting up Python on Ubuntu" /><published>2016-06-29T00:00:00+01:00</published><updated>2016-06-29T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/ubuntu-python-setup</id><content type="html" xml:base="http://jgardiner.co.uk/blog/ubuntu_python_setup">&lt;p&gt;A few colleagues asked me to run them through my AWS/Python setup, as we are making the transition to a cloud based computing environment for our data analytics team. I’ve turned my thoughts into this blog post. That way, I have a copy and hopefully it will help others with their setup too.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;This post assumes that you have an Amazon EC2 instance running Ubuntu Linux, and are setup to access the machine via SSH in a terminal. If not, head &lt;a href=&quot;http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html&quot;&gt;here&lt;/a&gt;. Done? Great, read on!&lt;/p&gt;
+
+&lt;p&gt;First up, open a terminal and type:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;ssh -i ~/path/to/.pem ubuntu@public_dns_of_instance
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The public DNS can be found on your EC2 console, under ‘Public DNS’.&lt;/p&gt;
+
+&lt;p&gt;Once you’re connected, you’ll need to set up a number of tools that will help with day to day development. Luckily for us, there are tons of Ubuntu setup scripts out there that simplify the process.&lt;/p&gt;
+
+&lt;p&gt;I’m currently using &lt;a href=&quot;https://github.com/alrra&quot;&gt;Cătălin Mariș’&lt;/a&gt; dotfiles repo to do this. In the terminal, run the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;bash -c &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;wget -qO - https://raw.github.com/alrra/dotfiles/master/src/os/setup.sh&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;That command will download the bash script and run it, setting up an initial environment in Ubuntu. It will ask you a number of questions during the setup all of which are relatively straightforward.&lt;/p&gt;
+
+&lt;p&gt;To understand what this does, look at &lt;a href=&quot;https://github.com/alrra/dotfiles/blob/master/src/os/setup.sh&quot;&gt;https://github.com/alrra/dotfiles/blob/master/src/os/setup.sh&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Once the script has run and you’ve restarted  the machine, we can get on with installing Python 3 alongside the system Python, along with dependencies needed for devleopment.&lt;/p&gt;
+
+&lt;p&gt;Go ahead and run this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo apt-get install build-essential python-dev libsqlite3-dev libreadline6-dev libgdbm-dev zlib1g-dev libbz2-dev sqlite3 zip
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;and once the dependencies have been installed, run:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo add-apt-repository ppa:fkrull/deadsnakes
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo apt-get update
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo apt-get install python3.5
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will install Python 3.5 on the system alongside the system’s Python 2. Now get pip installed for both versions of the language:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo apt-get install python-pip
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo apt-get install python3-pip
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will get you far enough to start using Python however, if you don’t want your packages being installed system wide it’s a good idea to use &lt;a href=&quot;https://virtualenv.pypa.io/en/stable/&quot;&gt;virtualenv&lt;/a&gt; and &lt;a href=&quot;https://virtualenvwrapper.readthedocs.io/en/latest/&quot;&gt;virtualenvwrapper&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Virtualenv allows you to create isolated Python development environments. The beauty of this is that multiple projects can depend on different Python versions, or different package versions, without worrying about a system wide upgrade breaking them.&lt;/p&gt;
+
+&lt;p&gt;Virtualenvwrapper is an extension to virtualenv, gifting you with easy to use commands for the creation and management of virtual environments.&lt;/p&gt;
+
+&lt;p&gt;To start, install Virtualenv (you may need to run this with sudo):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;pip install virtualenv
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;then create a directory where your virtualenvs will be stored:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;mkdir ~/.venvs
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now install virtualenvwrapper:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;pip install virtualenvwrapper
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Virtualenvwrapper needs a few environment variables set to work properly. Add these to the bottom of your &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; file like so:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;\n%s\n%s\n%s\n%s&#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;# virtualenv&#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;export WORKON_HOME=~/virtualenvs&#39;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;&#39;export PROJECT_HOME=~/projects&#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;source /usr/local/bin/virtualenvwrapper.sh&#39;&lt;/span&gt; &amp;gt;&amp;gt; ~/.bash_functions
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;reload the bash file by running:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now make the projects directory, which will contain your projects’ actual code:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;mkdir ~/projects
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now test the install by creating a new environment:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;mkvirtualenv -p python3.5 &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;That tells virtualenv to create an isolated environment called test, using Python 3.5, with the project code being kept in &lt;code class=&quot;highlighter-rouge&quot;&gt;~/projects/test&lt;/code&gt;. The new environment will automatically be created and the project directory will become the current working directory.&lt;/p&gt;
+
+&lt;p&gt;To deactivate the virtual environment, simply type:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;deactivate
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;If you want to go back and work on it again, use:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;workon &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;which will activate the environment and make its root the current working directory. Check out the virutalenvwrapper docs for other useful commands.&lt;/p&gt;
+
+&lt;p&gt;At this point, you should be good to go, but you might want to consider setting up a few local settings for yourself, such as git and Vim configurations.&lt;/p&gt;</content><summary>A few colleagues asked me to run them through my AWS/Python setup, as we are making the transition to a cloud based computing environment for our data analytics team. I’ve turned my thoughts into this blog post. That way, I have a copy and hopefully it will help others with their setup too.</summary></entry><entry><title>Jupyter Progress Bars</title><link href="http://jgardiner.co.uk/blog/jupyter_progress_bar" rel="alternate" type="text/html" title="Jupyter Progress Bars" /><published>2016-05-03T00:00:00+01:00</published><updated>2016-05-03T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/jupyter-progress-bar</id><content type="html" xml:base="http://jgardiner.co.uk/blog/jupyter_progress_bar">&lt;p&gt;Jupyter notebooks have a number of built in widgets that can be used to enhance a notebooks functionality and appearance. One of these is the &lt;code class=&quot;highlighter-rouge&quot;&gt;FloatProgress&lt;/code&gt; widget, which creates an updateable visual progress bar.&lt;/p&gt;
 
 &lt;hr /&gt;
 &lt;!--more--&gt;
