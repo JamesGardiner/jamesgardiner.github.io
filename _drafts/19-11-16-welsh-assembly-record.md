@@ -4,20 +4,18 @@ title: National Assembly for Wales
 permalink: blog/national_assembly_record
 ---
 
-How can technology help us better understand the political conversations that go on in our elected institutions? In this post, I explore the National Assembly for Wales' *Record of Proceedings*, a substantially verbatim transcript of the proceedings of the Assembly's Plenary meetings, and how these can be scraped and stored using Python and Scrapy to create a machine readable record of the conversations in the Assembly.
+How can technology help us better understand the political conversations that go on in our elected institutions? In this post, I scrape the National Assembly for Wales' *Record of Proceedings*, a substantially verbatim transcript of the proceedings of Plenary meetings, and how these can be scraped and stored using Python and Scrapy to create a machine readable record of the conversations in the Assembly.
 
 -----
 <!--more-->
 
-In Wales, we have a devolved *National Assembly for Wales*, made up of 60 elected Assembly Members (AMs) who are responsible for representing Wales and its people; making laws for Wales; agreeing Welsh taxes and holding the Welsh Government to account. Luckily, the Plenary sessions in the Assembly are all transcribed and are available as HTML on the [Assembly's website](http://www.assembly.wales/en/bus-home/Pages/cofnod.aspx). This might just be a bit tedious to search through page by page because of the number of entries!
-
-To make the process easier (and to get all the text as JSON!) we can use Python and the [Scrapy Framework](https://scrapy.org/) to scrape just the parts we want. First off, we start up a scrapy project:
+In Wales, we have a devolved [*National Assembly for Wales*](http://www.assembly.wales/), made up of 60 elected Assembly Members (AMs) who are responsible for representing Wales and its people; making laws for Wales; agreeing Welsh taxes and holding the Welsh Government to account. Luckily, the Plenary sessions in the Assembly are all transcribed and are available as HTML on the [Assembly's website](http://www.assembly.wales/en/bus-home/Pages/cofnod.aspx). The number of sessions, and the volume of text in each one makes manually reading through each record quite painstaking. To make the process easier (and to get all the text as JSON) we can use Python and the [Scrapy Framework](https://scrapy.org/), to scrape just the parts we want. First off  start a scrapy project:
 
 ```Bash
 scrapy startproject assembly_proceedings
 ```
 
-and in the `spiders/` directory that is created, we code a `RecordsSpider` class:
+and in the `spiders/` directory that is created, create a `RecordsSpider` class:
 
 ```Python
 class RecordsSpider(CrawlSpider):
@@ -50,7 +48,7 @@ class RecordsSpider(CrawlSpider):
     )
 ```
 
-The `RecordsSpider` creates a list of `start_urls` which are simply the `url_string` encoded with a year and month, one for each month from January 2013 to the end of 2016. This makes up the URLs needed to request the necessary HTML from the National Assembly website. The spider also has a simple rule set up that makes sure it only follows xpaths that contain 'English' in them, which makes sure we don't get Welsh text during this scrape (conversely, if we wanted the Welsh, we could change 'English' to 'Welsh').
+The `RecordsSpider` creates a list of `start_urls` which are simply the `url_string` encoded with a year and month, one for each month from January 2013 to the end of 2016. This makes up the URLs needed to request the necessary HTML from the National Assembly website. The spider also has a simple rule set up that makes sure it only follows xpaths that contain 'English' in them.
 
 The class has a single method `parse_records`, that takes a response, parses it for a number of variables (date of publication, time of contribution etc.). This method is set as the callback function in the single `Rule` object we have in the `rules` variable.
 
@@ -152,9 +150,15 @@ class GetRecordsPipeline(object):
         return item
 ```
 
-The full code can be found [here](https://github.com/JamesGardiner/assembly_proceedings/tree/master/src/data/get_records) and includes some boilerplate for generating output files of data.
+The full code can be found [here](https://github.com/JamesGardiner/assembly_proceedings/tree/master/src/data/get_records) and includes some boilerplate for generating output files of data. The command used to start the scrape is:
 
-Once the spider has run, we have JSON formatted speech from the Assembly proceedings, which can then be used in things like topic analysis and other Natual Language Processing methods. Below is a snippet of the format:
+```Bash
+scrapy crawl records -o
+```
+
+where `records` corresponds to the `name` value of the spider.
+
+Once the spider has run, we have JSON formatted speech from the Assembly proceedings, which can then be used in things like topic analysis and other Natual Language Processing methods. Below is a snippet of the data:
 
 ```JSON
 [
@@ -181,4 +185,4 @@ Once the spider has run, we have JSON formatted speech from the Assembly proceed
 ```
 
 
-This is a little side project for me, but I'm hoping that, by making the data and code available in an easy to use format, others might be able to pick thisup and do some interesting analyses with it.
+This is a little side project for me but I'm hoping that by making the data and code available others might be able to pick this up and do some interesting analyses with it.
