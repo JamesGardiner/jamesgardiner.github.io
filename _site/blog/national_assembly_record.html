@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A blog about data, analysis, and geography">
+
+    <title>National Assembly for Wales - James Gardiner</title>
+
+    <link rel="canonical" href="http://jgardiner.co.uk/blog/national_assembly_record">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="http://jgardiner.co.uk/feed.xml" title="James Gardiner" />
+
+</head>
+
+ 
+
+
+
+ <!-- CSS -->
+
+
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">James Gardiner</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+				
+                <li>
+                    <a href="/about/">About</a>
+                </li>
+				
+                
+				
+                <li>
+                    <a href="/contact/">Contact</a>
+                </li>
+				
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/svalbard.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>National Assembly for Wales</h1>
+                    
+                    <span class="meta">Posted by James Gardiner on November 20, 2016</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<p>How can technology help us better understand the political conversations that go on in our elected institutions? In this post, I scrape the National Assembly for Wales’ <em>Record of Proceedings</em>, a substantially verbatim transcript of the proceedings of Plenary meetings, and how these can be scraped and stored using Python and Scrapy to create a machine readable record of the conversations in the Assembly.</p>
+
+<hr />
+<!--more-->
+
+<p>In Wales, we have a devolved <a href="http://www.assembly.wales/"><em>National Assembly for Wales</em></a>, made up of 60 elected Assembly Members (AMs) who are responsible for representing Wales and its people; making laws for Wales; agreeing Welsh taxes and holding the Welsh Government to account. Luckily, the Plenary sessions in the Assembly are all transcribed and are available as HTML on the <a href="http://www.assembly.wales/en/bus-home/Pages/cofnod.aspx">Assembly’s website</a>. The number of sessions, and the volume of text in each one makes manually reading through each record quite painstaking. To make the process easier (and to get all the text as JSON) we can use Python and the <a href="https://scrapy.org/">Scrapy Framework</a>, to scrape just the parts we want. First off  start a scrapy project:</p>
+
+<pre><code class="language-Bash">scrapy startproject assembly_proceedings
+</code></pre>
+
+<p>and in the <code class="highlighter-rouge">spiders/</code> directory that is created, create a <code class="highlighter-rouge">RecordsSpider</code> class:</p>
+
+<pre><code class="language-Python">class RecordsSpider(CrawlSpider):
+    name = "records"
+    allowed_domains = ["www.assembly.wales"]
+
+    # URL string with format specifiers
+    url_string = ("http://www.assembly.wales/en/bus-home/pages/plenary.aspx?" +
+                  "assembly=4&amp;category=Record%20of%20Proceedings&amp;startDt=01/{month}/{year}" +
+                  "&amp;endDt={end_day}/{month}/{year}")
+
+    # create a list of start urls to crawl formatting the string above
+    # so that correct month end dates are used i.e. 28 for February
+    # on non-leap years
+    start_urls = []
+    for year in range(2013, 2016):
+        for month in range(1, 13):
+            start_urls.append(url_string.format(month=month, year=year,
+                                                end_day=monthrange(year, month)[1]))
+
+    rules = (
+        Rule(
+            LinkExtractor(
+                allow=(),
+                restrict_xpaths=("//a[contains(text(),'English')]",)
+            ),
+            callback="parse_records",
+            follow=True
+        ),
+    )
+</code></pre>
+
+<p>The <code class="highlighter-rouge">RecordsSpider</code> creates a list of <code class="highlighter-rouge">start_urls</code> which are simply the <code class="highlighter-rouge">url_string</code> encoded with a year and month, one for each month from January 2013 to the end of 2016. This makes up the URLs needed to request the necessary HTML from the National Assembly website. The spider also has a simple rule set up that makes sure it only follows xpaths that contain ‘English’ in them.</p>
+
+<p>The class has a single method <code class="highlighter-rouge">parse_records</code>, that takes a response, parses it for a number of variables (date of publication, time of contribution etc.). This method is set as the callback function in the single <code class="highlighter-rouge">Rule</code> object we have in the <code class="highlighter-rouge">rules</code> variable.</p>
+
+<pre><code class="language-Python">def parse_records(self, response):
+        # XPaths
+        date_xpath = '//*[@id="ropDate"]/span/text()'
+        contribution_xpath = '//div[@class="transcriptContribution"]'
+        time_xpath = 'div[@class="timeContainer"]/span/text()'
+        contribution_container_xpath = 'div[@class="contributionContainer"]'
+        member_name_xpath = 'div[@class="memberNameContainer"]/span[@class="memberName"]/text()'
+        contribution_text_xpath = 'div[@class="contribContainer"]/text()'
+        contribution_question_xpath = 'div[@class="contribContainer"]/span[@class="contributeTypeO"]/text()'
+
+        # Item that will hold the data
+        item = RecordItem()
+        # Date record being parsed took place on
+        date = response.selector.xpath(date_xpath).extract()
+        # 'date' in item should be a list of dicts
+        item['date'] = date
+        # List of all contributions made in the record being parsed
+        contributions = response.xpath(contribution_xpath)
+
+        # Log the date being parsed
+        print('Parsing the plenary session held on {}'.format(date))
+
+        item['contributions'] = []
+
+        # Loop through the contributions, store each one as a dict in a list
+        for contribution in contributions:
+            # Time of the contribution
+            contribution_time = contribution.xpath(
+                time_xpath).extract_first(default=None)
+
+            # Select the container element that holds other details
+            contribution_container = contribution.xpath(
+                contribution_container_xpath
+            )
+
+            # Name of the AM contributing
+            contributor_name = contribution_container.xpath(
+                member_name_xpath).extract_first(default=None)
+
+            # What was said
+            contribution_text = contribution_container.xpath(
+                contribution_text_xpath).extract_first(default=None)
+
+            # Text of a written question
+            contribution_question = contribution_container.xpath(
+                contribution_question_xpath).extract_first(default=None)
+
+            # dict to hold our data
+            contribution_dict = {}
+
+            # All verbal submissionshave a time stamp
+            # other elements (such as agenda headings and votes) don't
+            # so this if statement stops empty values entering
+            # the data
+            if contribution_time is not None:
+
+                contribution_dict['contribution_time'] = contribution_time
+                contribution_dict['contributor_name'] = contributor_name
+
+                # Contribution text and questions don't exist at the same
+                # time, so the below just stops empty key: value pairs
+                # entering the data
+                if contribution_text is not None:
+                    contribution_dict['contribution_text'] = contribution_text
+
+                if contribution_question is not None:
+                    contribution_dict['contribution_question'] = contribution_question
+
+                item['contributions'].append(contribution_dict)
+        return item
+</code></pre>
+
+<p>Notice that we define an <code class="highlighter-rouge">item</code> variable of type <code class="highlighter-rouge">RecordItem()</code>, which is itself a subclass of <code class="highlighter-rouge">scrapy.Items</code>, and is imported from <code class="highlighter-rouge">items.py</code>:</p>
+
+<pre><code class="language-Python"># items.py file
+import scrapy
+
+
+class RecordItem(scrapy.Item):
+    # Metadata associated once with each record
+    # date of plenary
+    date = scrapy.Field()
+    contributions = scrapy.Field()
+</code></pre>
+
+<p>This simply holds the fields that we are interested in storing, which are the date and contribution text.</p>
+
+<p>Finally, we define an item pipeline in <code class="highlighter-rouge">pipelines.py</code>, which will allow us to store items when invoking the scrapy command using the <code class="highlighter-rouge">-o</code> flag:</p>
+
+<pre><code class="language-Python"># pipelines.py file
+class GetRecordsPipeline(object):
+    def process_item(self, item, spider):
+        return item
+</code></pre>
+
+<p>The full code can be found <a href="https://github.com/JamesGardiner/assembly_proceedings/tree/master/src/data/get_records">here</a> and includes some boilerplate for generating output files of data. The command used to start the scrape is:</p>
+
+<pre><code class="language-Bash">scrapy crawl records -o
+</code></pre>
+
+<p>where <code class="highlighter-rouge">records</code> corresponds to the <code class="highlighter-rouge">name</code> value of the spider.</p>
+
+<p>Once the spider has run, we have JSON formatted speech from the Assembly proceedings, which can then be used in things like topic analysis and other Natual Language Processing methods. Below is a snippet of the data:</p>
+
+<pre><code class="language-JSON">[
+  {
+    "contributions": [
+      {
+        "contribution_time": "13:30",
+        "contribution_text": "Good afternoon. Attractive though your back is, Alun Davies, I would rather see your face. [Laughter.] That is now on the record. The National Assembly for Wales is now in session.",
+        "contributor_name": "Y Llywydd / The Presiding Officer"
+      },
+      {
+        "contribution_time": "13:30",
+        "contribution_text": "Yesterday, Andrew R. T. Davies raised a point of order regarding remarks made by the First Minister during questions to him. I have now had the opportunity to review the Record of Proceedings. The First Minister’s questions is the opportunity for Members to scrutinise the First Minister, and robust, spirited debate is expected. However, I expect all Members to behave courteously, even when both sides are disputing evidence. I would remind Members that they should not make remarks in the Chamber that appear to call into question another Member’s integrity. Thank you.",
+        "contributor_name": "Y Llywydd / The Presiding Officer"
+      },
+      {
+        "contribution_question": "1. Will the Minister make a statement on curriculum developments for schools. OAQ(4)0232(ESK)",
+        "contribution_time": "13:31",
+        "contributor_name": "David Rees"
+      }
+    ]
+  }
+]
+</code></pre>
+
+<p>This is a little side project for me but I’m hoping that by making the data and code available others might be able to pick this up and do some interesting analyses with it.</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/blog/ubuntu_python_setup" data-toggle="tooltip" data-placement="top" title="Setting up Python on Ubuntu">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    <li>
+                        <a href="https://twitter.com/_JamesRG">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/jrgardiner">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/JamesGardiner">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="mailto:jamesg87@me.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; James Gardiner 2016</p>
+                
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

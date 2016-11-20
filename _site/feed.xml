@@ -1,4 +1,177 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.2">Jekyll</generator><link href="http://jgardiner.co.uk/feed.xml" rel="self" type="application/atom+xml" /><link href="http://jgardiner.co.uk/" rel="alternate" type="text/html" /><updated>2016-11-20T10:22:16+00:00</updated><id>http://jgardiner.co.uk/</id><title>James Gardiner</title><subtitle>A blog about data, analysis, and geography</subtitle><entry><title>Setting up Python on Ubuntu</title><link href="http://jgardiner.co.uk/blog/ubuntu_python_setup" rel="alternate" type="text/html" title="Setting up Python on Ubuntu" /><published>2016-06-29T00:00:00+01:00</published><updated>2016-06-29T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/ubuntu-python-setup</id><content type="html" xml:base="http://jgardiner.co.uk/blog/ubuntu_python_setup">&lt;p&gt;A few colleagues asked me to run them through my AWS/Python setup, as we are making the transition to a cloud based computing environment for our data analytics team. I’ve turned my thoughts into this blog post. That way, I have a copy and hopefully it will help others with their setup too.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.2">Jekyll</generator><link href="http://jgardiner.co.uk/feed.xml" rel="self" type="application/atom+xml" /><link href="http://jgardiner.co.uk/" rel="alternate" type="text/html" /><updated>2016-11-20T10:27:33+00:00</updated><id>http://jgardiner.co.uk/</id><title>James Gardiner</title><subtitle>A blog about data, analysis, and geography</subtitle><entry><title>National Assembly for Wales</title><link href="http://jgardiner.co.uk/blog/national_assembly_record" rel="alternate" type="text/html" title="National Assembly for Wales" /><published>2016-11-20T00:00:00+00:00</published><updated>2016-11-20T00:00:00+00:00</updated><id>http://jgardiner.co.uk/blog/welsh-assembly-record</id><content type="html" xml:base="http://jgardiner.co.uk/blog/national_assembly_record">&lt;p&gt;How can technology help us better understand the political conversations that go on in our elected institutions? In this post, I scrape the National Assembly for Wales’ &lt;em&gt;Record of Proceedings&lt;/em&gt;, a substantially verbatim transcript of the proceedings of Plenary meetings, and how these can be scraped and stored using Python and Scrapy to create a machine readable record of the conversations in the Assembly.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;In Wales, we have a devolved &lt;a href=&quot;http://www.assembly.wales/&quot;&gt;&lt;em&gt;National Assembly for Wales&lt;/em&gt;&lt;/a&gt;, made up of 60 elected Assembly Members (AMs) who are responsible for representing Wales and its people; making laws for Wales; agreeing Welsh taxes and holding the Welsh Government to account. Luckily, the Plenary sessions in the Assembly are all transcribed and are available as HTML on the &lt;a href=&quot;http://www.assembly.wales/en/bus-home/Pages/cofnod.aspx&quot;&gt;Assembly’s website&lt;/a&gt;. The number of sessions, and the volume of text in each one makes manually reading through each record quite painstaking. To make the process easier (and to get all the text as JSON) we can use Python and the &lt;a href=&quot;https://scrapy.org/&quot;&gt;Scrapy Framework&lt;/a&gt;, to scrape just the parts we want. First off  start a scrapy project:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Bash&quot;&gt;scrapy startproject assembly_proceedings
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and in the &lt;code class=&quot;highlighter-rouge&quot;&gt;spiders/&lt;/code&gt; directory that is created, create a &lt;code class=&quot;highlighter-rouge&quot;&gt;RecordsSpider&lt;/code&gt; class:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;class RecordsSpider(CrawlSpider):
+    name = &quot;records&quot;
+    allowed_domains = [&quot;www.assembly.wales&quot;]
+
+    # URL string with format specifiers
+    url_string = (&quot;http://www.assembly.wales/en/bus-home/pages/plenary.aspx?&quot; +
+                  &quot;assembly=4&amp;amp;category=Record%20of%20Proceedings&amp;amp;startDt=01/{month}/{year}&quot; +
+                  &quot;&amp;amp;endDt={end_day}/{month}/{year}&quot;)
+
+    # create a list of start urls to crawl formatting the string above
+    # so that correct month end dates are used i.e. 28 for February
+    # on non-leap years
+    start_urls = []
+    for year in range(2013, 2016):
+        for month in range(1, 13):
+            start_urls.append(url_string.format(month=month, year=year,
+                                                end_day=monthrange(year, month)[1]))
+
+    rules = (
+        Rule(
+            LinkExtractor(
+                allow=(),
+                restrict_xpaths=(&quot;//a[contains(text(),&#39;English&#39;)]&quot;,)
+            ),
+            callback=&quot;parse_records&quot;,
+            follow=True
+        ),
+    )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;RecordsSpider&lt;/code&gt; creates a list of &lt;code class=&quot;highlighter-rouge&quot;&gt;start_urls&lt;/code&gt; which are simply the &lt;code class=&quot;highlighter-rouge&quot;&gt;url_string&lt;/code&gt; encoded with a year and month, one for each month from January 2013 to the end of 2016. This makes up the URLs needed to request the necessary HTML from the National Assembly website. The spider also has a simple rule set up that makes sure it only follows xpaths that contain ‘English’ in them.&lt;/p&gt;
+
+&lt;p&gt;The class has a single method &lt;code class=&quot;highlighter-rouge&quot;&gt;parse_records&lt;/code&gt;, that takes a response, parses it for a number of variables (date of publication, time of contribution etc.). This method is set as the callback function in the single &lt;code class=&quot;highlighter-rouge&quot;&gt;Rule&lt;/code&gt; object we have in the &lt;code class=&quot;highlighter-rouge&quot;&gt;rules&lt;/code&gt; variable.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;def parse_records(self, response):
+        # XPaths
+        date_xpath = &#39;//*[@id=&quot;ropDate&quot;]/span/text()&#39;
+        contribution_xpath = &#39;//div[@class=&quot;transcriptContribution&quot;]&#39;
+        time_xpath = &#39;div[@class=&quot;timeContainer&quot;]/span/text()&#39;
+        contribution_container_xpath = &#39;div[@class=&quot;contributionContainer&quot;]&#39;
+        member_name_xpath = &#39;div[@class=&quot;memberNameContainer&quot;]/span[@class=&quot;memberName&quot;]/text()&#39;
+        contribution_text_xpath = &#39;div[@class=&quot;contribContainer&quot;]/text()&#39;
+        contribution_question_xpath = &#39;div[@class=&quot;contribContainer&quot;]/span[@class=&quot;contributeTypeO&quot;]/text()&#39;
+
+        # Item that will hold the data
+        item = RecordItem()
+        # Date record being parsed took place on
+        date = response.selector.xpath(date_xpath).extract()
+        # &#39;date&#39; in item should be a list of dicts
+        item[&#39;date&#39;] = date
+        # List of all contributions made in the record being parsed
+        contributions = response.xpath(contribution_xpath)
+
+        # Log the date being parsed
+        print(&#39;Parsing the plenary session held on {}&#39;.format(date))
+
+        item[&#39;contributions&#39;] = []
+
+        # Loop through the contributions, store each one as a dict in a list
+        for contribution in contributions:
+            # Time of the contribution
+            contribution_time = contribution.xpath(
+                time_xpath).extract_first(default=None)
+
+            # Select the container element that holds other details
+            contribution_container = contribution.xpath(
+                contribution_container_xpath
+            )
+
+            # Name of the AM contributing
+            contributor_name = contribution_container.xpath(
+                member_name_xpath).extract_first(default=None)
+
+            # What was said
+            contribution_text = contribution_container.xpath(
+                contribution_text_xpath).extract_first(default=None)
+
+            # Text of a written question
+            contribution_question = contribution_container.xpath(
+                contribution_question_xpath).extract_first(default=None)
+
+            # dict to hold our data
+            contribution_dict = {}
+
+            # All verbal submissionshave a time stamp
+            # other elements (such as agenda headings and votes) don&#39;t
+            # so this if statement stops empty values entering
+            # the data
+            if contribution_time is not None:
+
+                contribution_dict[&#39;contribution_time&#39;] = contribution_time
+                contribution_dict[&#39;contributor_name&#39;] = contributor_name
+
+                # Contribution text and questions don&#39;t exist at the same
+                # time, so the below just stops empty key: value pairs
+                # entering the data
+                if contribution_text is not None:
+                    contribution_dict[&#39;contribution_text&#39;] = contribution_text
+
+                if contribution_question is not None:
+                    contribution_dict[&#39;contribution_question&#39;] = contribution_question
+
+                item[&#39;contributions&#39;].append(contribution_dict)
+        return item
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice that we define an &lt;code class=&quot;highlighter-rouge&quot;&gt;item&lt;/code&gt; variable of type &lt;code class=&quot;highlighter-rouge&quot;&gt;RecordItem()&lt;/code&gt;, which is itself a subclass of &lt;code class=&quot;highlighter-rouge&quot;&gt;scrapy.Items&lt;/code&gt;, and is imported from &lt;code class=&quot;highlighter-rouge&quot;&gt;items.py&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;# items.py file
+import scrapy
+
+
+class RecordItem(scrapy.Item):
+    # Metadata associated once with each record
+    # date of plenary
+    date = scrapy.Field()
+    contributions = scrapy.Field()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This simply holds the fields that we are interested in storing, which are the date and contribution text.&lt;/p&gt;
+
+&lt;p&gt;Finally, we define an item pipeline in &lt;code class=&quot;highlighter-rouge&quot;&gt;pipelines.py&lt;/code&gt;, which will allow us to store items when invoking the scrapy command using the &lt;code class=&quot;highlighter-rouge&quot;&gt;-o&lt;/code&gt; flag:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;# pipelines.py file
+class GetRecordsPipeline(object):
+    def process_item(self, item, spider):
+        return item
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The full code can be found &lt;a href=&quot;https://github.com/JamesGardiner/assembly_proceedings/tree/master/src/data/get_records&quot;&gt;here&lt;/a&gt; and includes some boilerplate for generating output files of data. The command used to start the scrape is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Bash&quot;&gt;scrapy crawl records -o
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;where &lt;code class=&quot;highlighter-rouge&quot;&gt;records&lt;/code&gt; corresponds to the &lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt; value of the spider.&lt;/p&gt;
+
+&lt;p&gt;Once the spider has run, we have JSON formatted speech from the Assembly proceedings, which can then be used in things like topic analysis and other Natual Language Processing methods. Below is a snippet of the data:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-JSON&quot;&gt;[
+  {
+    &quot;contributions&quot;: [
+      {
+        &quot;contribution_time&quot;: &quot;13:30&quot;,
+        &quot;contribution_text&quot;: &quot;Good afternoon. Attractive though your back is, Alun Davies, I would rather see your face. [Laughter.] That is now on the record. The National Assembly for Wales is now in session.&quot;,
+        &quot;contributor_name&quot;: &quot;Y Llywydd / The Presiding Officer&quot;
+      },
+      {
+        &quot;contribution_time&quot;: &quot;13:30&quot;,
+        &quot;contribution_text&quot;: &quot;Yesterday, Andrew R. T. Davies raised a point of order regarding remarks made by the First Minister during questions to him. I have now had the opportunity to review the Record of Proceedings. The First Minister’s questions is the opportunity for Members to scrutinise the First Minister, and robust, spirited debate is expected. However, I expect all Members to behave courteously, even when both sides are disputing evidence. I would remind Members that they should not make remarks in the Chamber that appear to call into question another Member’s integrity. Thank you.&quot;,
+        &quot;contributor_name&quot;: &quot;Y Llywydd / The Presiding Officer&quot;
+      },
+      {
+        &quot;contribution_question&quot;: &quot;1. Will the Minister make a statement on curriculum developments for schools. OAQ(4)0232(ESK)&quot;,
+        &quot;contribution_time&quot;: &quot;13:31&quot;,
+        &quot;contributor_name&quot;: &quot;David Rees&quot;
+      }
+    ]
+  }
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is a little side project for me but I’m hoping that by making the data and code available others might be able to pick this up and do some interesting analyses with it.&lt;/p&gt;</content><summary>How can technology help us better understand the political conversations that go on in our elected institutions? In this post, I scrape the National Assembly for Wales’ Record of Proceedings, a substantially verbatim transcript of the proceedings of Plenary meetings, and how these can be scraped and stored using Python and Scrapy to create a machine readable record of the conversations in the Assembly.</summary></entry><entry><title>Setting up Python on Ubuntu</title><link href="http://jgardiner.co.uk/blog/ubuntu_python_setup" rel="alternate" type="text/html" title="Setting up Python on Ubuntu" /><published>2016-06-29T00:00:00+01:00</published><updated>2016-06-29T00:00:00+01:00</updated><id>http://jgardiner.co.uk/blog/ubuntu-python-setup</id><content type="html" xml:base="http://jgardiner.co.uk/blog/ubuntu_python_setup">&lt;p&gt;A few colleagues asked me to run them through my AWS/Python setup, as we are making the transition to a cloud based computing environment for our data analytics team. I’ve turned my thoughts into this blog post. That way, I have a copy and hopefully it will help others with their setup too.&lt;/p&gt;
 
 &lt;hr /&gt;
 &lt;!--more--&gt;
