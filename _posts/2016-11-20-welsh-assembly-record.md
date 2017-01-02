@@ -11,13 +11,13 @@ How can technology help us better understand the political conversations that go
 
 In Wales, we have a devolved [*National Assembly for Wales*](http://www.assembly.wales/), made up of 60 elected Assembly Members (AMs) who are responsible for representing Wales and its people; making laws for Wales; agreeing Welsh taxes and holding the Welsh Government to account. Luckily, the Plenary sessions in the Assembly are all transcribed and are available as HTML on the [Assembly's website](http://www.assembly.wales/en/bus-home/Pages/cofnod.aspx). The number of sessions, and the volume of text in each one makes manually reading through each record quite painstaking. To make the process easier (and to get all the text as JSON) we can use Python and the [Scrapy Framework](https://scrapy.org/), to scrape just the parts we want. First off  start a scrapy project:
 
-```Bash
+``` yaml
 scrapy startproject assembly_proceedings
 ```
 
 and in the `spiders/` directory that is created, create a `RecordsSpider` class:
 
-```Python
+``` python
 class RecordsSpider(CrawlSpider):
     name = "records"
     allowed_domains = ["www.assembly.wales"]
@@ -52,7 +52,7 @@ The `RecordsSpider` creates a list of `start_urls` which are simply the `url_str
 
 The class has a single method `parse_records`, that takes a response, parses it for a number of variables (date of publication, time of contribution etc.). This method is set as the callback function in the single `Rule` object we have in the `rules` variable.
 
-```Python
+``` python
 def parse_records(self, response):
         # XPaths
         date_xpath = '//*[@id="ropDate"]/span/text()'
@@ -127,7 +127,7 @@ def parse_records(self, response):
 
 Notice that we define an `item` variable of type `RecordItem()`, which is itself a subclass of `scrapy.Items`, and is imported from `items.py`:
 
-```Python
+``` python
 # items.py file
 import scrapy
 
@@ -143,7 +143,7 @@ This simply holds the fields that we are interested in storing, which are the da
 
 Finally, we define an item pipeline in `pipelines.py`, which will allow us to store items when invoking the scrapy command using the `-o` flag:
 
-```Python
+``` python
 # pipelines.py file
 class GetRecordsPipeline(object):
     def process_item(self, item, spider):
@@ -152,7 +152,7 @@ class GetRecordsPipeline(object):
 
 The full code can be found [here](https://github.com/JamesGardiner/assembly_proceedings/tree/master/src/data/get_records) and includes some boilerplate for generating output files of data. The command used to start the scrape is:
 
-```Bash
+``` yaml
 scrapy crawl records -o
 ```
 
@@ -160,7 +160,7 @@ where `records` corresponds to the `name` value of the spider.
 
 Once the spider has run, we have JSON formatted speech from the Assembly proceedings, which can then be used in things like topic analysis and other Natual Language Processing methods. Below is a snippet of the data:
 
-```JSON
+``` json
 [
   {
     "contributions": [

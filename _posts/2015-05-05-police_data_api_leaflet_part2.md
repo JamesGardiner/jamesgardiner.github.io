@@ -28,23 +28,23 @@ anywhere.
 
 To start, add the following js and css files to the head of the html file. These allow access to the MarkerCluster plugin.
 
-```html
-	https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js
-	https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css
-	https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css
+``` yaml
+https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js
+https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css
+https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css
 ```
 
 Then create a geocoder object using the mapbox.places geocoder index ID and add it to the map.
 
-```javascript
-	//create a geocoder
-	var geocoderControl = L.mapbox.geocoderControl(
-		'mapbox.places', {
-		autocomplete: true
-	});
+``` javascript
+//create a geocoder
+var geocoderControl = L.mapbox.geocoderControl(
+	'mapbox.places', {
+	autocomplete: true
+});
 
-	//add it to the map
-	geocoderControl.addTo(map);
+//add it to the map
+geocoderControl.addTo(map);
 ```
 
 Using the mapbox.places ID allows you to make 1 geocode per request and to cache any results for up
@@ -53,32 +53,29 @@ to 30 days.
 Next, add an event listener to the geocoderControl which is fired when a user
 selects one of the autocomplete options listed in the geocoder.
 
-```javascript
-	geocoderControl.on('select', function(res) {
+``` javascript
+geocoderControl.on('select', function(res) {
 
-	//get the lat lon
-    var latlng = (res.feature.center);
+//get the lat lon
+var latlng = (res.feature.center);
 
-	//construct the url to call the neighbourhood boundary
-	var url = "https://data.police.uk/api/locate-neighbourhood?"
-		+ "q=" + latlng[1] + "," + latlng[0];
+//construct the url to call the neighbourhood boundary
+var url = "https://data.police.uk/api/locate-neighbourhood?"
+	+ "q=" + latlng[1] + "," + latlng[0];
 
-	$.getJSON(url, function(data) {
-		if ( data ) {
-			//add a new marker at the lat lon of postcode centroid
-			var marker = L.marker([latlng[1], latlng[0]]);
-			markers.addLayer(marker);
-			map.addLayer(markers);
+$.getJSON(url, function(data) {
+	if ( data ) {
+		//add a new marker at the lat lon of postcode centroid
+		var marker = L.marker([latlng[1], latlng[0]]);
+		markers.addLayer(marker);
+		map.addLayer(markers);
 
-			loadBoundary(data.force, data.neighbourhood);
-		};
-	});
+		loadBoundary(data.force, data.neighbourhood);
+	};
 });
 ```
 
-This returns a GeoJSON object from which the latitude and longitude of the center
-can be found using ```(res.feature.center)```. This is then used in a jQuery call to the
-police.uk locate-neighbourhood method.
+This returns a GeoJSON object from which the latitude and longitude of the center can be found using ```(res.feature.center)```. This is then used in a jQuery call to the police.uk locate-neighbourhood method.
 
 The jQuery.getJSON method allows for a callback function to be put in place. This is used
 to check the return contains data, to add a standard leaflet marker to
@@ -89,7 +86,7 @@ To make it easier to load neighbourhood boundaries, some of the code in the neig
 function from part 1 is stripped out and becomes its own function, which is now called from both the
 neighbourhoodChanged function and from the callback function in the geocoder event listener.
 
-```javascript
+``` javascript
 var loadBoundary = function (forceID, neighbourhoodID) {
 	var latlng = [];
 	var url = "https://data.police.uk/api/" + forceID + "/" + neighbourhoodID + "/boundary";
@@ -132,7 +129,7 @@ In this instance ```POST``` is used over ```GET``` due to ```GET``` having a URL
 
 A callback function is implemented, so that a successful query fires the addCrimeLayer function, which is again a new function.
 
-```javascript
+``` javascript
 var getStreetCrimes = function (polygon, date) {
 
 	var data = '';
@@ -160,7 +157,7 @@ var getStreetCrimes = function (polygon, date) {
 The addCrimeLayer works on a Leaflet MarkerClusterGroup, defined
 towards the start of the javascript.
 
-```javascript
+``` javascript
 	//create crime cluster marker
 	var crime_markers = new L.MarkerClusterGroup();
 ```
@@ -170,8 +167,8 @@ array, defined the objects category and the street name to which the crime was a
 before creating a new marker for that object, adding this as a layer to the ```crime_markers```
 ```MarkerClusterGroup``` and binding a popup to it with the street name and crime category.
 
-```javascript
-	var addCrimeLayer = function (crimes){
+``` javascript
+var addCrimeLayer = function (crimes){
 
 	crime_markers.clearLayers();
 
@@ -199,7 +196,3 @@ Whilst not perfect (e.g. force name and neighbourhood name don't update when the
 this is a good example of how easy it is to use Leaflet to display geographic data, even when there
 are high densities of points. Also, it's great to see the [police.uk](http://police.uk) site putting all
 of this data out there as Open Data under an [Open Government License](http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/licensing-for-re-use/).
-
-A full screen map is available [here](/maps/police_api_02).
-<div id="map" class="map leaflet-container" style="height: 500px; position:relative;"></div>
-<script src='/javascript/police_api_tutorial2.js' type="text/javascript"></script>

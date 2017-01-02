@@ -28,34 +28,39 @@ Before displaying a Leaflet map in our post, we first have to include the leafle
 
 The second is to [download](https://github.com/Leaflet/Leaflet/releases) the Leaflet source code from the Leaflet [GitHub repository](https://github.com/Leaflet/Leaflet). This then needs to be built using Node.js. Run the following commands (assuming you have already [installed Node.js on your machine](http://nodejs.org/)):
 
-	npm install -g jake
-	npm install
-	
+``` js
+npm install -g jake
+npm install
+```
+
 You may need to run these using sudo. Once installed, `cd` into the `/Leaflet` directory that your downloaded files are saved in and run the command 
 
-	jake build
+``` js
+jake build
+```
 
 This will create a `dist` folder where you will find a `leaflet-source.js` file, a minified `leaflet.js` file for deployment as well as a `leaflet.css` file. These now need to be accessible to your jekyll build, so `cd` into your `username.github.io` folder that contains your jekyll site and run the following commands:
 
-	mkdir javascript
-	mkdir css
-	
-	cp path/to/leaflist/dist/leaflet.css css/
-	cp path/to/leaflet/dist/leaflet.js javascript/
-	
-To include these in a jekyll blog post, I have used the method outlined by [Matt Gemmell](http://mattgemmell.com/page-specific-assets-with-jekyll/), where the post YAML front matter should include:
-	
-```yaml
+``` js
+mkdir javascript
+mkdir css
 
+cp path/to/leaflist/dist/leaflet.css css/
+cp path/to/leaflet/dist/leaflet.js javascript/
+```
+
+To include these in a jekyll blog post, I have used the method outlined by [Matt Gemmell](http://mattgemmell.com/page-specific-assets-with-jekyll/), where the post YAML front matter should include:
+
+``` yaml
 ---
 custom_css: leaflet
 custom_js: leaflet
 ---
-
 ```
 
 and then include the following in the post's `HEAD`:
 
+``` js
 {% highlight html %}
 {% raw %}
   {% if page.custom_js %}
@@ -79,8 +84,10 @@ Then I add a div to the post which will contain the map:
 <div id="map" class="map leaflet-container" style="height: 500px; position:relative;"></div>
 {% endraw %}
 {% endhighlight %}
+```
 
 followed by this `<script>` tag:
+``` js
 {% highlight html %}
 {% raw %}
 <script>
@@ -95,9 +102,11 @@ L.tileLayer('http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png', 
 </script>
 {% endraw %}
 {% endhighlight %}
+```
 
 which initialises the map object, sets the coordinates of the initial view, sets the zoom layer and finally uses `L.tileLayer` to call a tile layer from MapBox and add it to the map.
 
+``` html
 <div id="map" class="map leaflet-container" style="height: 500px; position:relative;"></div>
 <script>
 // create the map object and set the cooridnates of the initial view:
@@ -109,5 +118,5 @@ L.tileLayer('http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png', 
     maxZoom: 18
 }).addTo(map);
 </script>
- 
+ ```
 This is an easy way to get a Leaflet.js map up and running on a GitHub hosted Jekyll blog.  I'm hoping to get more walkthroughs up showing further functionality of Leaflet and other open source GIS software, soon.

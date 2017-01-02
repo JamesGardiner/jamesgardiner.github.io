@@ -13,7 +13,7 @@ This post assumes that you have an Amazon EC2 instance running Ubuntu Linux, and
 
 First up, open a terminal and type:
 
-```bash
+``` yaml
 $ ssh -i ~/path/to/.pem ubuntu@public_dns_of_instance
 ```
 
@@ -23,7 +23,7 @@ Once you're connected, you'll need to set up a number of tools that will help wi
 
 I'm currently using [Cătălin Mariș'](https://github.com/alrra) dotfiles repo to do this. In the terminal, run the following:
 
-```bash
+``` yaml
 $ bash -c "$(wget -qO - https://raw.github.com/alrra/dotfiles/master/src/os/setup.sh)"
 ```
 
@@ -35,13 +35,13 @@ Once the script has run and you've restarted  the machine, we can get on with in
 
 Go ahead and run this:
 
-```bash
+``` yaml
 $ sudo apt-get install build-essential python-dev libsqlite3-dev libreadline6-dev libgdbm-dev zlib1g-dev libbz2-dev sqlite3 zip
 ```
 
 and once the dependencies have been installed, run:
 
-```bash
+``` yaml
 $ sudo add-apt-repository ppa:fkrull/deadsnakes
 $ sudo apt-get update
 $ sudo apt-get install python3.5
@@ -49,11 +49,11 @@ $ sudo apt-get install python3.5
 
 This will install Python 3.5 on the system alongside the system's Python 2. Now get pip installed for both versions of the language:
 
-```bash
+``` yaml
 $ sudo apt-get install python-pip
 ```
 
-```bash
+``` yaml
 $ sudo apt-get install python3-pip
 ```
 
@@ -65,44 +65,44 @@ Virtualenvwrapper is an extension to virtualenv, gifting you with easy to use co
 
 To start, install Virtualenv (you may need to run this with sudo):
 
-```bash
+``` yaml
 $ pip install virtualenv
 ```
 
 then create a directory where your virtualenvs will be stored:
 
-```bash
+``` yaml
 $ mkdir ~/.venvs
 ```
 
 Now install virtualenvwrapper:
 
-```bash
+``` yaml
 $ pip install virtualenvwrapper
 ```
 
 Virtualenvwrapper needs a few environment variables set to work properly. Add these to the bottom of your `~/.bashrc` file like so:
 
-```bash
+``` yaml
 $ printf '\n%s\n%s\n%s\n%s' '# virtualenv' 'export WORKON_HOME=~/virtualenvs' \
 'export PROJECT_HOME=~/projects' 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bash_functions
 ```
 
 reload the bash file by running:
 
-```bash
+``` yaml
 $ source ~/.bash_profile
 ```
 
 Now make the projects directory, which will contain your projects' actual code:
 
-```bash
+``` yaml
 $ mkdir ~/projects
 ```
 
 Now test the install by creating a new environment:
 
-```bash
+``` yaml
 $ mkvirtualenv -p python3.5 test
 ```
 
@@ -110,13 +110,13 @@ That tells virtualenv to create an isolated environment called test, using Pytho
 
 To deactivate the virtual environment, simply type:
 
-```bash
+``` yaml
 deactivate
 ```
 
 If you want to go back and work on it again, use:
 
-```bash
+``` yaml
 workon test
 ```
 

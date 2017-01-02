@@ -43,11 +43,13 @@ The basic flow is:
 1. Connect to the db using [psycopg2](http://initd.org/psycopg/)
 2. Using SQL, expand the JSON Arrays to individual JSON values:
 
-        SELECT r_hr,
-               DATE,
-               Jsonb_array_elements(hr) #> '{time}'  AS TIME,
-               Jsonb_array_elements(hr) #> '{value}' AS value
-        FROM heart_rate
+``` sql
+SELECT r_hr,
+       DATE,
+       Jsonb_array_elements(hr) #> '{time}'  AS TIME,
+       Jsonb_array_elements(hr) #> '{value}' AS value
+FROM heart_rate
+```
 
 3. Read these into [pandas](http://pandas.pydata.org/) as a dataframe
 4. Reset the index as datetime objects
@@ -62,7 +64,7 @@ to daily means:
 
 is just one line of code:
 
-```python
+``` python
 # Resample to day using mean
 dfrsmpl = df.resample('D', how='mean')
 ```

@@ -6,11 +6,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A blog about data, analysis, and geography">
+    <meta name="description" content="Python Consultant, specialising in data engineering">
 
     <title>Setting up Python on Ubuntu - James Gardiner</title>
 
-    <link rel="canonical" href="http://jgardiner.co.uk/blog/ubuntu_python_setup">
+    <link rel="canonical" href="http://localhost:4000/blog/ubuntu_python_setup">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -33,7 +33,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link type="application/atom+xml" rel="alternate" href="http://jgardiner.co.uk/feed.xml" title="James Gardiner" />
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="James Gardiner" />
 
 </head>
 
@@ -68,12 +68,9 @@
                 <li>
                     <a href="/">Home</a>
                 </li>
-                
-				
                 <li>
-                    <a href="/about/">About</a>
+                    <a href="/blog">Blog</a>
                 </li>
-				
                 
 				
                 <li>
@@ -119,7 +116,7 @@
 
 <p>First up, open a terminal and type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ssh -i ~/path/to/.pem ubuntu@public_dns_of_instance
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ ssh -i ~/path/to/.pem ubuntu@public_dns_of_instance</span>
 </code></pre>
 </div>
 
@@ -129,7 +126,7 @@
 
 <p>I’m currently using <a href="https://github.com/alrra">Cătălin Mariș’</a> dotfiles repo to do this. In the terminal, run the following:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>bash -c <span class="s2">"</span><span class="k">$(</span>wget -qO - https://raw.github.com/alrra/dotfiles/master/src/os/setup.sh<span class="k">)</span><span class="s2">"</span>
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ bash -c "$(wget -qO - https://raw.github.com/alrra/dotfiles/master/src/os/setup.sh)"</span>
 </code></pre>
 </div>
 
@@ -141,25 +138,25 @@
 
 <p>Go ahead and run this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo apt-get install build-essential python-dev libsqlite3-dev libreadline6-dev libgdbm-dev zlib1g-dev libbz2-dev sqlite3 zip
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ sudo apt-get install build-essential python-dev libsqlite3-dev libreadline6-dev libgdbm-dev zlib1g-dev libbz2-dev sqlite3 zip</span>
 </code></pre>
 </div>
 
 <p>and once the dependencies have been installed, run:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo add-apt-repository ppa:fkrull/deadsnakes
-<span class="gp">$ </span>sudo apt-get update
-<span class="gp">$ </span>sudo apt-get install python3.5
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ sudo add-apt-repository ppa:fkrull/deadsnakes</span>
+<span class="s">$ sudo apt-get update</span>
+<span class="s">$ sudo apt-get install python3.5</span>
 </code></pre>
 </div>
 
 <p>This will install Python 3.5 on the system alongside the system’s Python 2. Now get pip installed for both versions of the language:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo apt-get install python-pip
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ sudo apt-get install python-pip</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo apt-get install python3-pip
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ sudo apt-get install python3-pip</span>
 </code></pre>
 </div>
 
@@ -171,44 +168,44 @@
 
 <p>To start, install Virtualenv (you may need to run this with sudo):</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>pip install virtualenv
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ pip install virtualenv</span>
 </code></pre>
 </div>
 
 <p>then create a directory where your virtualenvs will be stored:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir ~/.venvs
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ mkdir ~/.venvs</span>
 </code></pre>
 </div>
 
 <p>Now install virtualenvwrapper:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>pip install virtualenvwrapper
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ pip install virtualenvwrapper</span>
 </code></pre>
 </div>
 
 <p>Virtualenvwrapper needs a few environment variables set to work properly. Add these to the bottom of your <code class="highlighter-rouge">~/.bashrc</code> file like so:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">printf</span> <span class="s1">'\n%s\n%s\n%s\n%s'</span> <span class="s1">'# virtualenv'</span> <span class="s1">'export WORKON_HOME=~/virtualenvs'</span> <span class="se">\</span>
-<span class="s1">'export PROJECT_HOME=~/projects'</span> <span class="s1">'source /usr/local/bin/virtualenvwrapper.sh'</span> &gt;&gt; ~/.bash_functions
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ printf '\n%s\n%s\n%s\n%s' '# virtualenv' 'export WORKON_HOME=~/virtualenvs' \</span>
+<span class="s1">'</span><span class="s">export</span><span class="nv"> </span><span class="s">PROJECT_HOME=~/projects'</span> <span class="s1">'</span><span class="s">source</span><span class="nv"> </span><span class="s">/usr/local/bin/virtualenvwrapper.sh'</span> <span class="pi">&gt;</span><span class="err">&gt;</span> <span class="err">~/.bash_functions</span>
 </code></pre>
 </div>
 
 <p>reload the bash file by running:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">source</span> ~/.bash_profile
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ source ~/.bash_profile</span>
 </code></pre>
 </div>
 
 <p>Now make the projects directory, which will contain your projects’ actual code:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkdir ~/projects
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ mkdir ~/projects</span>
 </code></pre>
 </div>
 
 <p>Now test the install by creating a new environment:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mkvirtualenv -p python3.5 <span class="nb">test</span>
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">$ mkvirtualenv -p python3.5 test</span>
 </code></pre>
 </div>
 
@@ -216,13 +213,13 @@
 
 <p>To deactivate the virtual environment, simply type:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>deactivate
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">deactivate</span>
 </code></pre>
 </div>
 
 <p>If you want to go back and work on it again, use:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>workon <span class="nb">test</span>
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">workon test</span>
 </code></pre>
 </div>
 
@@ -293,7 +290,7 @@
                     
                     
                     <li>
-                        <a href="mailto:jamesg87@me.com">
+                        <a href="mailto:james@jgardiner.co.uk">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
@@ -302,7 +299,7 @@
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">Copyright &copy; James Gardiner 2016</p>
+                <p class="copyright text-muted">Copyright &copy; James Gardiner 2017</p>
                 
             </div>
         </div>

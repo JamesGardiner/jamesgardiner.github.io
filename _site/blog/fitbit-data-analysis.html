@@ -6,11 +6,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A blog about data, analysis, and geography">
+    <meta name="description" content="Python Consultant, specialising in data engineering">
 
     <title>Fitbit Data Analysis - James Gardiner</title>
 
-    <link rel="canonical" href="http://jgardiner.co.uk/blog/fitbit-data-analysis">
+    <link rel="canonical" href="http://localhost:4000/blog/fitbit-data-analysis">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -33,7 +33,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link type="application/atom+xml" rel="alternate" href="http://jgardiner.co.uk/feed.xml" title="James Gardiner" />
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="James Gardiner" />
 
 </head>
 
@@ -68,12 +68,9 @@
                 <li>
                     <a href="/">Home</a>
                 </li>
-                
-				
                 <li>
-                    <a href="/about/">About</a>
+                    <a href="/blog">Blog</a>
                 </li>
-				
                 
 				
                 <li>
@@ -154,17 +151,18 @@
 
 <ol>
   <li>Connect to the db using <a href="http://initd.org/psycopg/">psycopg2</a></li>
-  <li>
-    <p>Using SQL, expand the JSON Arrays to individual JSON values:</p>
+  <li>Using SQL, expand the JSON Arrays to individual JSON values:</li>
+</ol>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> SELECT r_hr,
-        DATE,
-        Jsonb_array_elements(hr) #&gt; '{time}'  AS TIME,
-        Jsonb_array_elements(hr) #&gt; '{value}' AS value
- FROM heart_rate
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">r_hr</span><span class="p">,</span>
+       <span class="n">DATE</span><span class="p">,</span>
+       <span class="n">Jsonb_array_elements</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="o">#&gt;</span> <span class="s1">'{time}'</span>  <span class="k">AS</span> <span class="n">TIME</span><span class="p">,</span>
+       <span class="n">Jsonb_array_elements</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span> <span class="o">#&gt;</span> <span class="s1">'{value}'</span> <span class="k">AS</span> <span class="n">value</span>
+<span class="k">FROM</span> <span class="n">heart_rate</span>
 </code></pre>
-    </div>
-  </li>
+</div>
+
+<ol>
   <li>Read these into <a href="http://pandas.pydata.org/">pandas</a> as a dataframe</li>
   <li>Reset the index as datetime objects</li>
 </ol>
@@ -179,7 +177,7 @@
 
 <p>is just one line of code:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Resample to day using mean</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c"># Resample to day using mean</span>
 <span class="n">dfrsmpl</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s">'D'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">'mean'</span><span class="p">)</span>
 </code></pre>
 </div>
@@ -254,7 +252,7 @@
                     
                     
                     <li>
-                        <a href="mailto:jamesg87@me.com">
+                        <a href="mailto:james@jgardiner.co.uk">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
@@ -263,7 +261,7 @@
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">Copyright &copy; James Gardiner 2016</p>
+                <p class="copyright text-muted">Copyright &copy; James Gardiner 2017</p>
                 
             </div>
         </div>

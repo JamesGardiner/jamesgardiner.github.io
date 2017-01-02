@@ -1,39 +1,21 @@
 ---
 layout: page
-description: "Data + Science = Information"
-header-img: "img/svalbard.jpg"
-header-attr: '"Adventsdalen, Svalbard." (CC BY 2.0) by  NordForsk'
-header-href: 'https://www.flickr.com/photos/nordforsk/16354155134/'
+description: "This is what I do."
+header-img: "img/trefriw.jpg"
+header-attr: '"Way on high" (CC BY-NC-ND 2.0) by  ashperkins'
+header-href: "https://www.flickr.com/photos/perki496/13564883324/in/photolist-mEFzdG-4YUZsA-VtffZ-qwVHTr-8fzos2-qfnZWd-fJzoHe-57tfQo-et4Wik-7LUo6w-3Vwxdq-brVEdz-ikUGU-qwRUJQ-ettJQ4-f6apE4-47q19a-cxJ8uy-3Ljzwm-9TtZev-ffvTod-qkbcr-8xWAur-AXqCV-57tgbQ-4RG9DH-csmCKj-qfoa2h-pJNuYM-j57GMg-5PQVmF-frBQ3Z-quS9tj-oBKe32-95XEQr-omPncJ-brk3Fg-byu3Nn-fw4M84-277MFt-a5ScDs-9Tugf6-71nBs3-jpikr-37s3Lo-87yaWj-3EJR1G-sbuGw-9Tx62b-4baBaJ"
 ---
+<style type="text/css">
+    p.para{ text-align: justify; }
+</style>
 
-{% for post in paginator.posts %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-    </a>
-    <p class="post-meta">Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}</p>
-</div>
-<hr>
-{% endfor %}
+<p class="para">I am an experienced, motivated and professional Python Consultant, with over 5 years experience in a range of software disciplines including: data engineering; geospatial development; database design and implementation; back end development; and data analysis. I also have experience of working in Agile environments, using Scrum and Kanban methods, as well as TDD.<p>
 
-<!-- Pager -->
-{% if paginator.total_pages > 1 %}
-<ul class="pager">
-    {% if paginator.previous_page %}
-    <li class="previous">
-        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
-    </li>
-    {% endif %}
-    {% if paginator.next_page %}
-    <li class="next">
-        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
-    </li>
-    {% endif %}
-</ul>
-{% endif %}
+<p class="para">I've worked on a number of projects for different clients and employers. Most recently I have been building data aggregation, storage and analysis pipelines for <a href="www.nesta.org.uk">Nesta</a>, a charity with the goal of supporting innovation in the UK and more widely. The platform I helped build provides new information on innovation systems to policy makers in Wales, using cutting-edge data analytics. My role encompassed the whole of the data pipeline, from discovery through capture, storage, analysis and on to visualisation.</p>
+
+<p class="para">I'd describe myself as a broad specialist - I have a range of experience but focus most of my time in two key areas. These are in data engineering which encompasses tools such as Postgres, AWS, Apache Spark and Map Reduce, and geospatial development such as building PostGIS spatial databases and geospatial servers.</p>
+
+<p class="para">I've been using Python ever since I realised just how quick and (relatively) easy it makes the engineering process - it's now my go to language for most applications. I also have quite a bit of Javascript experience (mainly for data visualisation and developing geospatial web-apps), and even used to write some form of C and Java a long time ago.</p>
+
+<p class="para">You can contact me using the mail button below - I am open to hearing about prospective contracts, Python meetup events as well as opportunities to give talks on data engineering or geospatial development using Python.</p>
+

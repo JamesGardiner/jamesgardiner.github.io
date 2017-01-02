@@ -28,120 +28,119 @@ To select a specific force, we can add a dropdown to our map by
 extending the Leaflet [Control class](http://leafletjs.com/reference.html#control) with the 
 following code:
 
-```javascript
-	var ForceControl = L.Control.extend({
-		initialize: function (name, options) {
-	    	L.Util.setOptions(this, options);
-	    },
+``` javascript
+var ForceControl = L.Control.extend({
+	initialize: function (name, options) {
+    	L.Util.setOptions(this, options);
+    },
+	
+	//function to be called when the control is added to the map
+  onAdd: function (map) {
 		
-		//function to be called when the control is added to the map
-	    onAdd: function (map) {
-			
-			//create the control container with a 
-			//class name
-	        var container = L.DomUtil.create('div', 'force-control');
-			
-			//create a list of available police force names and ids
-			//using the data.police.uk api Forces method inside the 
-			//'force' global variable.
-			forces = [];
-			
-			//jquery method to retrieve JSON object
-			$.getJSON("https://data.police.uk/api/forces", 
-				function(data) {
-					
-					//create the htmlString that will form the
-					//innerHTML of the forces dropdown
-					var htmlString = '<select id=forcesList ' +
-						'onchange="updateNeighbourhoods()"><option>' + 
-						'Select a Force</option>';
-					
-					//create individual force <option> tags within the
-					//<select> tag
-					$.each(data, function(i, item){
-			        	forces[i] = item;
-						htmlString = htmlString + '<option>' + 
-							forces[i].name + '</option>';
-			    	});
-					
-					//close the select tag
-					htmlString += '</select>';
-					
-					//update the dropdown list innerHTML 
-					//with the list of forces
-					container.innerHTML = htmlString;
-					
-					//allow a user to select a single option
-		    		container.firstChild.onmousedown = 
-						container.firstChild.ondblclick = 
-							L.DomEvent.stopPropagation;
-							
-				});
-			
-			return container;
-			
-		}
-	});
+		//create the control container with a
+		//class name
+    var container = L.DomUtil.create('div', 'force-control');
+		
+		//create a list of available police force names and ids
+		//using the data.police.uk api Forces method inside the
+		//'force' global variable.
+		forces = [];
+		
+		//jquery method to retrieve JSON object
+		$.getJSON("https://data.police.uk/api/forces",
+			function(data) {
+				
+				//create the htmlString that will form the
+				//innerHTML of the forces dropdown
+				var htmlString = '<select id=forcesList ' +
+					'onchange="updateNeighbourhoods()"><option>' +
+					'Select a Force</option>';
+				
+				//create individual force <option> tags within the
+				//<select> tag
+				$.each(data, function(i, item){
+		      forces[i] = item;
+					htmlString = htmlString + '<option>' +
+						forces[i].name + '</option>';
+		    	});
+				
+				//close the select tag
+				htmlString += '</select>';
+				
+				//update the dropdown list innerHTML
+				//with the list of forces
+				container.innerHTML = htmlString;
+				
+				//allow a user to select a single option
+	    		container.firstChild.onmousedown =
+					container.firstChild.ondblclick =
+						L.DomEvent.stopPropagation;
+						
+			});
+		
+		return container;
+		
+	}
+});
 ```
-		
-To update the list of neighbourhoods in the selected force we name a function in the innerHTML, 
-```updateNeighbourhoods()``` that listens for an ```onChange``` event. This means that whenever a new
+
+To update the list of neighbourhoods in the selected force we name a function in the innerHTML, ```updateNeighbourhoods()``` that listens for an ```onChange``` event. This means that whenever a new
 force is selected, the function is called. Before we cover that though, lets add a new dropdown to the map,
 with a standard placeholder text instead of a neighbourhood name:
 
-```javascript
-	//extend the L.Control class to create a custom drop down box
-	// initially with simple placeholder text
-	var NeighbourhoodControl = L.Control.extend({
-		initialize: function (name, options, placeholder) {
-	        L.Util.setOptions(this, options);
-		},
+``` javascript
+//extend the L.Control class to create a custom drop down box
+// initially with simple placeholder text
+var NeighbourhoodControl = L.Control.extend({
+	initialize: function (name, options, placeholder) {
+        L.Util.setOptions(this, options);
+	},
+	
+	//once added to the map div, carry out the following
+	onAdd: function (map) {
 		
-		//once added to the map div, carry out the following
-		onAdd: function (map) {
-			
-			//create the control container with a particular
-			//class name
-	        var container = L.DomUtil.create(
-				'div', 'neighbourhoods_control'
-			);
-			
-			//add the following to the innerHTML
-			var htmlString = '<select id="neighbourhoodsList"' +
-				'onchange="neighbourhoodChanged()">' + 
-				'<option>Select a police force</option></select>';
-			
-			//make this the div's innerHTML
-			container.innerHTML = htmlString;
-			
-			//allow a user to select a single option
-			container.firstChild.onmousedown = 
-				container.firstChild.ondblclick = 
-					L.DomEvent.stopPropagation;
-			
-			return container;
-			
-		}
-	});
+		//create the control container with a particular
+		//class name
+        var container = L.DomUtil.create(
+			'div', 'neighbourhoods_control'
+		);
+		
+		//add the following to the innerHTML
+		var htmlString = '<select id="neighbourhoodsList"' +
+			'onchange="neighbourhoodChanged()">' + 
+			'<option>Select a police force</option></select>';
+		
+		//make this the div's innerHTML
+		container.innerHTML = htmlString;
+		
+		//allow a user to select a single option
+		container.firstChild.onmousedown = 
+			container.firstChild.ondblclick = 
+				L.DomEvent.stopPropagation;
+		
+		return container;
+		
+	}
+});
 ```
 
 Both these controls can then be added:
 
-```javascript
-	map.addControl(new ForceControl('forcesList',
-		{position: 'topright'}
-	));
-		
-	map.addControl(new NeighbourhoodControl('neighbourhoodList',
-		{position: 'topright'}
-	));
+``` javascript
+map.addControl(new ForceControl('forcesList',
+	{position: 'topright'}
+));
+
+map.addControl(new NeighbourhoodControl('neighbourhoodList',
+	{position: 'topright'}
+));
 ```
- 
+
  To update the innerHTML of this div dynamically, we can use the ```updateNeighbourhoods()```
  function that we call whenever a new police force is selected:
- 
- ```javascript
- 	//update the current list of neighbourhoods using the selected 
+
+ ``` javascript
+ 	//update the current list of neighbourhoods using the selected
  	//force id
 	var updateNeighbourhoods = function (name) {
 	
@@ -223,69 +222,69 @@ This queries the API for the selected neighbourhood boundary (which is returned 
 GeoJSON), gets the bounding box of the boundary, automatically recenters and zooms to the specified position
 then adds the layer.
 
-```javascript
-	//function called when the selected neighbourhood is changed
-	var neighbourhoodChanged = function() {
+``` javascript
+//function called when the selected neighbourhood is changed
+var neighbourhoodChanged = function() {
+
+	//get the selected 'hood name
+	var hood = $("#neighbourhoodsList").val();
 	
-		//get the selected 'hood name
-		var hood = $("#neighbourhoodsList").val();
-		
-		//compare the name of the 'hood to get the id
-		for (i in neighbourhoods) {
-			if (neighbourhoods[i].name === hood) {
-				var id = [];
-				id[0] = neighbourhoods[i].id;
-			};
+	//compare the name of the 'hood to get the id
+	for (i in neighbourhoods) {
+		if (neighbourhoods[i].name === hood) {
+			var id = [];
+			id[0] = neighbourhoods[i].id;
 		};
-			
-		//compare the name of the force to get the id
-		var force = $("#forcesList").val();
-		for (var i in forces) {
-	  		if (forces[i].name === force) {
-				id[1] = forces[i].id;
-			};
-		};
+	};
 		
-		//if we match both the force and 'hood then
-		//carry on, else break
-		if ( id[0] && id[1] ) {
-			var latlng = [];
-			var url = "https://data.police.uk/api/" + id[1] + "/" 
-				+ id[0] + "/boundary";
+	//compare the name of the force to get the id
+	var force = $("#forcesList").val();
+	for (var i in forces) {
+  		if (forces[i].name === force) {
+			id[1] = forces[i].id;
+		};
+	};
+	
+	//if we match both the force and 'hood then
+	//carry on, else break
+	if ( id[0] && id[1] ) {
+		var latlng = [];
+		var url = "https://data.police.uk/api/" + id[1] + "/" 
+			+ id[0] + "/boundary";
+		
+		//jquery to get the JSON
+		$.getJSON(url, function(data) {
 			
-			//jquery to get the JSON
-			$.getJSON(url, function(data) {
-				
-				//create an array of boundary lat lon pairs
-				$.each(data, function(i, item){
-					latlng.push(new L.LatLng(data[i].latitude,
-						data[i].longitude));
-				});
-				
-				//if a layer is already present, remove it
-				if ( areaLayer ) {
-					map.removeLayer(areaLayer);
-				};
-				
-				//create a new polygon object using the latlng array
-		       	areaLayer = new L.Polygon(latlng, {
-		            clickable: true,
-					weight: 3,
-					opacity: 0.4,
-					fillOpacity: 0.1
-		        });
-				
-				//redraw the map to the bounds of the new polygon
-				map.fitBounds(areaLayer.getBounds());
-				//add the polygon to the map
-		    	areaLayer.addTo(map);
-					
+			//create an array of boundary lat lon pairs
+			$.each(data, function(i, item){
+				latlng.push(new L.LatLng(data[i].latitude,
+					data[i].longitude));
 			});
-		};
+			
+			//if a layer is already present, remove it
+			if ( areaLayer ) {
+				map.removeLayer(areaLayer);
+			};
+			
+			//create a new polygon object using the latlng array
+	       	areaLayer = new L.Polygon(latlng, {
+	            clickable: true,
+				weight: 3,
+				opacity: 0.4,
+				fillOpacity: 0.1
+	        });
+			
+			//redraw the map to the bounds of the new polygon
+			map.fitBounds(areaLayer.getBounds());
+			//add the polygon to the map
+	    	areaLayer.addTo(map);
+				
+		});
+	};
 	};
 ```
 
-Here is the final map, with the two drop down selections available, [here](http://jamesgardiner.github.io/maps/police_api_01) is a full screen example:
+Here is the final map, with the two drop down selections available:
 
 <div id="map" class="map leaflet-container" style="height: 500px; position:relative;"></div>
 <script src='/javascript/police_api_tutorial1.js' type="text/javascript"></script>

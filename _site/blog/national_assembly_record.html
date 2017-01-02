@@ -6,11 +6,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A blog about data, analysis, and geography">
+    <meta name="description" content="Python Consultant, specialising in data engineering">
 
     <title>National Assembly for Wales - James Gardiner</title>
 
-    <link rel="canonical" href="http://jgardiner.co.uk/blog/national_assembly_record">
+    <link rel="canonical" href="http://localhost:4000/blog/national_assembly_record">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -33,7 +33,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link type="application/atom+xml" rel="alternate" href="http://jgardiner.co.uk/feed.xml" title="James Gardiner" />
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="James Gardiner" />
 
 </head>
 
@@ -68,12 +68,9 @@
                 <li>
                     <a href="/">Home</a>
                 </li>
-                
-				
                 <li>
-                    <a href="/about/">About</a>
+                    <a href="/blog">Blog</a>
                 </li>
-				
                 
 				
                 <li>
@@ -117,171 +114,178 @@
 
 <p>In Wales, we have a devolved <a href="http://www.assembly.wales/"><em>National Assembly for Wales</em></a>, made up of 60 elected Assembly Members (AMs) who are responsible for representing Wales and its people; making laws for Wales; agreeing Welsh taxes and holding the Welsh Government to account. Luckily, the Plenary sessions in the Assembly are all transcribed and are available as HTML on the <a href="http://www.assembly.wales/en/bus-home/Pages/cofnod.aspx">Assembly’s website</a>. The number of sessions, and the volume of text in each one makes manually reading through each record quite painstaking. To make the process easier (and to get all the text as JSON) we can use Python and the <a href="https://scrapy.org/">Scrapy Framework</a>, to scrape just the parts we want. First off  start a scrapy project:</p>
 
-<pre><code class="language-Bash">scrapy startproject assembly_proceedings
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">scrapy startproject assembly_proceedings</span>
 </code></pre>
+</div>
 
 <p>and in the <code class="highlighter-rouge">spiders/</code> directory that is created, create a <code class="highlighter-rouge">RecordsSpider</code> class:</p>
 
-<pre><code class="language-Python">class RecordsSpider(CrawlSpider):
-    name = "records"
-    allowed_domains = ["www.assembly.wales"]
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">RecordsSpider</span><span class="p">(</span><span class="n">CrawlSpider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">"records"</span>
+    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s">"www.assembly.wales"</span><span class="p">]</span>
 
-    # URL string with format specifiers
-    url_string = ("http://www.assembly.wales/en/bus-home/pages/plenary.aspx?" +
-                  "assembly=4&amp;category=Record%20of%20Proceedings&amp;startDt=01/{month}/{year}" +
-                  "&amp;endDt={end_day}/{month}/{year}")
+    <span class="c"># URL string with format specifiers</span>
+    <span class="n">url_string</span> <span class="o">=</span> <span class="p">(</span><span class="s">"http://www.assembly.wales/en/bus-home/pages/plenary.aspx?"</span> <span class="o">+</span>
+                  <span class="s">"assembly=4&amp;category=Record</span><span class="si">%20</span><span class="s">of</span><span class="si">%20</span><span class="s">Proceedings&amp;startDt=01/{month}/{year}"</span> <span class="o">+</span>
+                  <span class="s">"&amp;endDt={end_day}/{month}/{year}"</span><span class="p">)</span>
 
-    # create a list of start urls to crawl formatting the string above
-    # so that correct month end dates are used i.e. 28 for February
-    # on non-leap years
-    start_urls = []
-    for year in range(2013, 2016):
-        for month in range(1, 13):
-            start_urls.append(url_string.format(month=month, year=year,
-                                                end_day=monthrange(year, month)[1]))
+    <span class="c"># create a list of start urls to crawl formatting the string above</span>
+    <span class="c"># so that correct month end dates are used i.e. 28 for February</span>
+    <span class="c"># on non-leap years</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">2016</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
+            <span class="n">start_urls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="n">month</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span>
+                                                <span class="n">end_day</span><span class="o">=</span><span class="n">monthrange</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
 
-    rules = (
-        Rule(
-            LinkExtractor(
-                allow=(),
-                restrict_xpaths=("//a[contains(text(),'English')]",)
-            ),
-            callback="parse_records",
-            follow=True
-        ),
-    )
+    <span class="n">rules</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Rule</span><span class="p">(</span>
+            <span class="n">LinkExtractor</span><span class="p">(</span>
+                <span class="n">allow</span><span class="o">=</span><span class="p">(),</span>
+                <span class="n">restrict_xpaths</span><span class="o">=</span><span class="p">(</span><span class="s">"//a[contains(text(),'English')]"</span><span class="p">,)</span>
+            <span class="p">),</span>
+            <span class="n">callback</span><span class="o">=</span><span class="s">"parse_records"</span><span class="p">,</span>
+            <span class="n">follow</span><span class="o">=</span><span class="bp">True</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
 </code></pre>
+</div>
 
 <p>The <code class="highlighter-rouge">RecordsSpider</code> creates a list of <code class="highlighter-rouge">start_urls</code> which are simply the <code class="highlighter-rouge">url_string</code> encoded with a year and month, one for each month from January 2013 to the end of 2016. This makes up the URLs needed to request the necessary HTML from the National Assembly website. The spider also has a simple rule set up that makes sure it only follows xpaths that contain ‘English’ in them.</p>
 
 <p>The class has a single method <code class="highlighter-rouge">parse_records</code>, that takes a response, parses it for a number of variables (date of publication, time of contribution etc.). This method is set as the callback function in the single <code class="highlighter-rouge">Rule</code> object we have in the <code class="highlighter-rouge">rules</code> variable.</p>
 
-<pre><code class="language-Python">def parse_records(self, response):
-        # XPaths
-        date_xpath = '//*[@id="ropDate"]/span/text()'
-        contribution_xpath = '//div[@class="transcriptContribution"]'
-        time_xpath = 'div[@class="timeContainer"]/span/text()'
-        contribution_container_xpath = 'div[@class="contributionContainer"]'
-        member_name_xpath = 'div[@class="memberNameContainer"]/span[@class="memberName"]/text()'
-        contribution_text_xpath = 'div[@class="contribContainer"]/text()'
-        contribution_question_xpath = 'div[@class="contribContainer"]/span[@class="contributeTypeO"]/text()'
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_records</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="c"># XPaths</span>
+        <span class="n">date_xpath</span> <span class="o">=</span> <span class="s">'//*[@id="ropDate"]/span/text()'</span>
+        <span class="n">contribution_xpath</span> <span class="o">=</span> <span class="s">'//div[@class="transcriptContribution"]'</span>
+        <span class="n">time_xpath</span> <span class="o">=</span> <span class="s">'div[@class="timeContainer"]/span/text()'</span>
+        <span class="n">contribution_container_xpath</span> <span class="o">=</span> <span class="s">'div[@class="contributionContainer"]'</span>
+        <span class="n">member_name_xpath</span> <span class="o">=</span> <span class="s">'div[@class="memberNameContainer"]/span[@class="memberName"]/text()'</span>
+        <span class="n">contribution_text_xpath</span> <span class="o">=</span> <span class="s">'div[@class="contribContainer"]/text()'</span>
+        <span class="n">contribution_question_xpath</span> <span class="o">=</span> <span class="s">'div[@class="contribContainer"]/span[@class="contributeTypeO"]/text()'</span>
 
-        # Item that will hold the data
-        item = RecordItem()
-        # Date record being parsed took place on
-        date = response.selector.xpath(date_xpath).extract()
-        # 'date' in item should be a list of dicts
-        item['date'] = date
-        # List of all contributions made in the record being parsed
-        contributions = response.xpath(contribution_xpath)
+        <span class="c"># Item that will hold the data</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">RecordItem</span><span class="p">()</span>
+        <span class="c"># Date record being parsed took place on</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="n">date_xpath</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="c"># 'date' in item should be a list of dicts</span>
+        <span class="n">item</span><span class="p">[</span><span class="s">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">date</span>
+        <span class="c"># List of all contributions made in the record being parsed</span>
+        <span class="n">contributions</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="n">contribution_xpath</span><span class="p">)</span>
 
-        # Log the date being parsed
-        print('Parsing the plenary session held on {}'.format(date))
+        <span class="c"># Log the date being parsed</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Parsing the plenary session held on {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="p">))</span>
 
-        item['contributions'] = []
+        <span class="n">item</span><span class="p">[</span><span class="s">'contributions'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        # Loop through the contributions, store each one as a dict in a list
-        for contribution in contributions:
-            # Time of the contribution
-            contribution_time = contribution.xpath(
-                time_xpath).extract_first(default=None)
+        <span class="c"># Loop through the contributions, store each one as a dict in a list</span>
+        <span class="k">for</span> <span class="n">contribution</span> <span class="ow">in</span> <span class="n">contributions</span><span class="p">:</span>
+            <span class="c"># Time of the contribution</span>
+            <span class="n">contribution_time</span> <span class="o">=</span> <span class="n">contribution</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                <span class="n">time_xpath</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 
-            # Select the container element that holds other details
-            contribution_container = contribution.xpath(
-                contribution_container_xpath
-            )
+            <span class="c"># Select the container element that holds other details</span>
+            <span class="n">contribution_container</span> <span class="o">=</span> <span class="n">contribution</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                <span class="n">contribution_container_xpath</span>
+            <span class="p">)</span>
 
-            # Name of the AM contributing
-            contributor_name = contribution_container.xpath(
-                member_name_xpath).extract_first(default=None)
+            <span class="c"># Name of the AM contributing</span>
+            <span class="n">contributor_name</span> <span class="o">=</span> <span class="n">contribution_container</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                <span class="n">member_name_xpath</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 
-            # What was said
-            contribution_text = contribution_container.xpath(
-                contribution_text_xpath).extract_first(default=None)
+            <span class="c"># What was said</span>
+            <span class="n">contribution_text</span> <span class="o">=</span> <span class="n">contribution_container</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                <span class="n">contribution_text_xpath</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 
-            # Text of a written question
-            contribution_question = contribution_container.xpath(
-                contribution_question_xpath).extract_first(default=None)
+            <span class="c"># Text of a written question</span>
+            <span class="n">contribution_question</span> <span class="o">=</span> <span class="n">contribution_container</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                <span class="n">contribution_question_xpath</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 
-            # dict to hold our data
-            contribution_dict = {}
+            <span class="c"># dict to hold our data</span>
+            <span class="n">contribution_dict</span> <span class="o">=</span> <span class="p">{}</span>
 
-            # All verbal submissionshave a time stamp
-            # other elements (such as agenda headings and votes) don't
-            # so this if statement stops empty values entering
-            # the data
-            if contribution_time is not None:
+            <span class="c"># All verbal submissionshave a time stamp</span>
+            <span class="c"># other elements (such as agenda headings and votes) don't</span>
+            <span class="c"># so this if statement stops empty values entering</span>
+            <span class="c"># the data</span>
+            <span class="k">if</span> <span class="n">contribution_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
 
-                contribution_dict['contribution_time'] = contribution_time
-                contribution_dict['contributor_name'] = contributor_name
+                <span class="n">contribution_dict</span><span class="p">[</span><span class="s">'contribution_time'</span><span class="p">]</span> <span class="o">=</span> <span class="n">contribution_time</span>
+                <span class="n">contribution_dict</span><span class="p">[</span><span class="s">'contributor_name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">contributor_name</span>
 
-                # Contribution text and questions don't exist at the same
-                # time, so the below just stops empty key: value pairs
-                # entering the data
-                if contribution_text is not None:
-                    contribution_dict['contribution_text'] = contribution_text
+                <span class="c"># Contribution text and questions don't exist at the same</span>
+                <span class="c"># time, so the below just stops empty key: value pairs</span>
+                <span class="c"># entering the data</span>
+                <span class="k">if</span> <span class="n">contribution_text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">contribution_dict</span><span class="p">[</span><span class="s">'contribution_text'</span><span class="p">]</span> <span class="o">=</span> <span class="n">contribution_text</span>
 
-                if contribution_question is not None:
-                    contribution_dict['contribution_question'] = contribution_question
+                <span class="k">if</span> <span class="n">contribution_question</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">contribution_dict</span><span class="p">[</span><span class="s">'contribution_question'</span><span class="p">]</span> <span class="o">=</span> <span class="n">contribution_question</span>
 
-                item['contributions'].append(contribution_dict)
-        return item
+                <span class="n">item</span><span class="p">[</span><span class="s">'contributions'</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">contribution_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">item</span>
 </code></pre>
+</div>
 
 <p>Notice that we define an <code class="highlighter-rouge">item</code> variable of type <code class="highlighter-rouge">RecordItem()</code>, which is itself a subclass of <code class="highlighter-rouge">scrapy.Items</code>, and is imported from <code class="highlighter-rouge">items.py</code>:</p>
 
-<pre><code class="language-Python"># items.py file
-import scrapy
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c"># items.py file</span>
+<span class="kn">import</span> <span class="nn">scrapy</span>
 
 
-class RecordItem(scrapy.Item):
-    # Metadata associated once with each record
-    # date of plenary
-    date = scrapy.Field()
-    contributions = scrapy.Field()
+<span class="k">class</span> <span class="nc">RecordItem</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="c"># Metadata associated once with each record</span>
+    <span class="c"># date of plenary</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">contributions</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
 </code></pre>
+</div>
 
 <p>This simply holds the fields that we are interested in storing, which are the date and contribution text.</p>
 
 <p>Finally, we define an item pipeline in <code class="highlighter-rouge">pipelines.py</code>, which will allow us to store items when invoking the scrapy command using the <code class="highlighter-rouge">-o</code> flag:</p>
 
-<pre><code class="language-Python"># pipelines.py file
-class GetRecordsPipeline(object):
-    def process_item(self, item, spider):
-        return item
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c"># pipelines.py file</span>
+<span class="k">class</span> <span class="nc">GetRecordsPipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span>
 </code></pre>
+</div>
 
 <p>The full code can be found <a href="https://github.com/JamesGardiner/assembly_proceedings/tree/master/src/data/get_records">here</a> and includes some boilerplate for generating output files of data. The command used to start the scrape is:</p>
 
-<pre><code class="language-Bash">scrapy crawl records -o
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">scrapy crawl records -o</span>
 </code></pre>
+</div>
 
 <p>where <code class="highlighter-rouge">records</code> corresponds to the <code class="highlighter-rouge">name</code> value of the spider.</p>
 
 <p>Once the spider has run, we have JSON formatted speech from the Assembly proceedings, which can then be used in things like topic analysis and other Natual Language Processing methods. Below is a snippet of the data:</p>
 
-<pre><code class="language-JSON">[
-  {
-    "contributions": [
-      {
-        "contribution_time": "13:30",
-        "contribution_text": "Good afternoon. Attractive though your back is, Alun Davies, I would rather see your face. [Laughter.] That is now on the record. The National Assembly for Wales is now in session.",
-        "contributor_name": "Y Llywydd / The Presiding Officer"
-      },
-      {
-        "contribution_time": "13:30",
-        "contribution_text": "Yesterday, Andrew R. T. Davies raised a point of order regarding remarks made by the First Minister during questions to him. I have now had the opportunity to review the Record of Proceedings. The First Minister’s questions is the opportunity for Members to scrutinise the First Minister, and robust, spirited debate is expected. However, I expect all Members to behave courteously, even when both sides are disputing evidence. I would remind Members that they should not make remarks in the Chamber that appear to call into question another Member’s integrity. Thank you.",
-        "contributor_name": "Y Llywydd / The Presiding Officer"
-      },
-      {
-        "contribution_question": "1. Will the Minister make a statement on curriculum developments for schools. OAQ(4)0232(ESK)",
-        "contribution_time": "13:31",
-        "contributor_name": "David Rees"
-      }
-    ]
-  }
-]
-</code></pre>
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"contributions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"contribution_time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"13:30"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"contribution_text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good afternoon. Attractive though your back is, Alun Davies, I would rather see your face. [Laughter.] That is now on the record. The National Assembly for Wales is now in session."</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"contributor_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Y Llywydd / The Presiding Officer"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"contribution_time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"13:30"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"contribution_text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Yesterday, Andrew R. T. Davies raised a point of order regarding remarks made by the First Minister during questions to him. I have now had the opportunity to review the Record of Proceedings. The First Minister’s questions is the opportunity for Members to scrutinise the First Minister, and robust, spirited debate is expected. However, I expect all Members to behave courteously, even when both sides are disputing evidence. I would remind Members that they should not make remarks in the Chamber that appear to call into question another Member’s integrity. Thank you."</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"contributor_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Y Llywydd / The Presiding Officer"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"contribution_question"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1. Will the Minister make a statement on curriculum developments for schools. OAQ(4)0232(ESK)"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"contribution_time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"13:31"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"contributor_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"David Rees"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+</div>
 
 <p>This is a little side project for me but I’m hoping that by making the data and code available others might be able to pick this up and do some interesting analyses with it.</p>
 
@@ -343,7 +347,7 @@ class GetRecordsPipeline(object):
                     
                     
                     <li>
-                        <a href="mailto:jamesg87@me.com">
+                        <a href="mailto:james@jgardiner.co.uk">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
@@ -352,7 +356,7 @@ class GetRecordsPipeline(object):
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">Copyright &copy; James Gardiner 2016</p>
+                <p class="copyright text-muted">Copyright &copy; James Gardiner 2017</p>
                 
             </div>
         </div>

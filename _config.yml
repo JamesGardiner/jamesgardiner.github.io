@@ -2,21 +2,24 @@
 title: James Gardiner
 header-img: img/svalbard.jpg
 
-email: jamesg87@me.com
+email: james@jgardiner.co.uk
 copyright_name: James Gardiner
-description: "A blog about data, analysis, and geography"
+description: "Python Consultant, specialising in data engineering"
 baseurl: ""
 url: "http://jgardiner.co.uk"
 twitter_username: _JamesRG
 github_username:  JamesGardiner
 linkedin_username:  jrgardiner
-email_username:  jamesg87@me.com
+email_username:  james@jgardiner.co.uk
 
 # Build settings
 markdown: kramdown
-highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 permalink: pretty
 paginate: 5
+paginate_path: "blog/page:num"
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
 
 gems: [jekyll-paginate,

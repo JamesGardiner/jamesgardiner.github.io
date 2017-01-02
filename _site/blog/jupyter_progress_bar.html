@@ -6,11 +6,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A blog about data, analysis, and geography">
+    <meta name="description" content="Python Consultant, specialising in data engineering">
 
     <title>Jupyter Progress Bars - James Gardiner</title>
 
-    <link rel="canonical" href="http://jgardiner.co.uk/blog/jupyter_progress_bar">
+    <link rel="canonical" href="http://localhost:4000/blog/jupyter_progress_bar">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -33,7 +33,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link type="application/atom+xml" rel="alternate" href="http://jgardiner.co.uk/feed.xml" title="James Gardiner" />
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="James Gardiner" />
 
 </head>
 
@@ -68,12 +68,9 @@
                 <li>
                     <a href="/">Home</a>
                 </li>
-                
-				
                 <li>
-                    <a href="/about/">About</a>
+                    <a href="/blog">Blog</a>
                 </li>
-				
                 
 				
                 <li>
@@ -121,21 +118,21 @@
 
 <p>Not wanting to print and update a string, a bit of searching threw up <a href="https://www.reddit.com/r/Python/comments/34tdr2/a_simple_progress_bar_for_ipython_notebooks/">this</a> thread, the final comment of which shows how to implement a progress bar widget in Jupyter. The syntax in this comment is now deprecated but essentially all that is needed is to import the <code class="highlighter-rouge">FloatProgress</code> class from <code class="highlighter-rouge">ipywidgets</code> and the <code class="highlighter-rouge">display</code> method from the <code class="highlighter-rouge">IPython.display</code> module:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">FloatProgress</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">FloatProgress</span>
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
 </code></pre>
 </div>
 
 <p>Then create a <code class="highlighter-rouge">FloatProgress</code> object with the relevant min and max values and display it below the selected cell:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">f</span> <span class="o">=</span> <span class="n">FloatProgress</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">f</span> <span class="o">=</span> <span class="n">FloatProgress</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </code></pre>
 </div>
 
 <p>The bar can be updated by setting the f.value variable:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">f</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="mi">1</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">f</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="mi">1</span>
 </code></pre>
 </div>
 
@@ -205,7 +202,7 @@
                     
                     
                     <li>
-                        <a href="mailto:jamesg87@me.com">
+                        <a href="mailto:james@jgardiner.co.uk">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
@@ -214,7 +211,7 @@
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">Copyright &copy; James Gardiner 2016</p>
+                <p class="copyright text-muted">Copyright &copy; James Gardiner 2017</p>
                 
             </div>
         </div>
