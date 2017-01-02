@@ -15,8 +15,7 @@ email_username:  james@jgardiner.co.uk
 # Build settings
 markdown: kramdown
 kramdown:
-  input: GFM
-  syntax_highlighter: rouge
+highlighter: rouge
 permalink: pretty
 paginate: 5
 paginate_path: "blog/page:num"

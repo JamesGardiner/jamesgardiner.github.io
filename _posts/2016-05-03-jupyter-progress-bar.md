@@ -15,21 +15,21 @@ My first thought was [tqdm](https://pypi.python.org/pypi/tqdm), _"A Fast, Extens
 
 Not wanting to print and update a string, a bit of searching threw up [this](https://www.reddit.com/r/Python/comments/34tdr2/a_simple_progress_bar_for_ipython_notebooks/) thread, the final comment of which shows how to implement a progress bar widget in Jupyter. The syntax in this comment is now deprecated but essentially all that is needed is to import the `FloatProgress` class from `ipywidgets` and the `display` method from the `IPython.display` module:
 
-```python
+``` python
 from ipywidgets import FloatProgress
 from IPython.display import display
 ```
 
 Then create a `FloatProgress` object with the relevant min and max values and display it below the selected cell:
 
-```python
+``` python
 f = FloatProgress(min=0, max=100)
 display(f)
 ```
 
 The bar can be updated by setting the f.value variable:
 
-```python
+``` python
 f.value += 1
 ```
 

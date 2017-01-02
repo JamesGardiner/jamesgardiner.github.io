@@ -128,19 +128,17 @@
 <ol>
   <li>Sign up for the Fitbit API and register a ‘personal’ type app. The important aspects here are ensuring the <em>Browser</em> app type is selected and the callback url is set to <code class="highlighter-rouge">http://127.0.0.1:8080/</code>.</li>
   <li>Install <a href="https://github.com/orcasgit/python-fitbit">python-fitbit</a> into whatever Python environment you’re working with. At the time of writing, I needed to install from master on github rather than PyPi due to issues with OAUTH2 authentication. The fixed version may be released by the time you read this post.</li>
-  <li>
-    <p>Run the <code class="highlighter-rouge">gather_keys_oauth2.py</code> script available in the repo, passing it the client id and client secret for your app (which are available on the manage my apps page of the Fitbit site). Save the access token and refresh tokens in a file. I used a simple JSON file called tokens.json with the format:</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code><span class="w"> </span><span class="p">{</span><span class="w">
-   </span><span class="nt">"ACCESS_TOKEN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOURACCESSTOKEN"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"CLIENT_SECRET"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOURCLIENTSECRET"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"REFRESH_TOKEN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOURREFRESHTOKEN"</span><span class="p">,</span><span class="w">
-   </span><span class="nt">"CLIENT_ID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOURCLIENTID"</span><span class="w">
- </span><span class="p">}</span><span class="w">
-</span></code></pre>
-    </div>
-  </li>
+  <li>Run the <code class="highlighter-rouge">gather_keys_oauth2.py</code> script available in the repo, passing it the client id and client secret for your app (which are available on the manage my apps page of the Fitbit site). Save the access token and refresh tokens in a file. I used a simple JSON file called tokens.json with the format:</li>
 </ol>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"ACCESS_TOKEN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOURACCESSTOKEN"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"CLIENT_SECRET"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOURCLIENTSECRET"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"REFRESH_TOKEN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOURREFRESHTOKEN"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"CLIENT_ID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOURCLIENTID"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
 
 <p>4.Clone my <a href="https://github.com/JamesGardiner/heart-rate-analysis"><code class="highlighter-rouge">heart_rate_analysis</code></a> repo, and run the <code class="highlighter-rouge">setup_hr_db.py</code> script. This requires postgres and a database called <code class="highlighter-rouge">fitbit</code> (though you can change the <code class="highlighter-rouge">connection_string</code> to something else if you want, the script relies on SQLAlchemy). I’m using Postgres as I wanted to try mixing SQL and JSON in a single database. If you’ve saved a <code class="highlighter-rouge">tokens.json</code> file in the same directory as this script, it will read in your keys from there, otherwise specify their location in main().</p>
 

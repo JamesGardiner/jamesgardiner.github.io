@@ -11,7 +11,7 @@ How can technology help us better understand the political conversations that go
 
 In Wales, we have a devolved [*National Assembly for Wales*](http://www.assembly.wales/), made up of 60 elected Assembly Members (AMs) who are responsible for representing Wales and its people; making laws for Wales; agreeing Welsh taxes and holding the Welsh Government to account. Luckily, the Plenary sessions in the Assembly are all transcribed and are available as HTML on the [Assembly's website](http://www.assembly.wales/en/bus-home/Pages/cofnod.aspx). The number of sessions, and the volume of text in each one makes manually reading through each record quite painstaking. To make the process easier (and to get all the text as JSON) we can use Python and the [Scrapy Framework](https://scrapy.org/), to scrape just the parts we want. First off  start a scrapy project:
 
-``` yaml
+``` bash
 scrapy startproject assembly_proceedings
 ```
 
@@ -152,7 +152,7 @@ class GetRecordsPipeline(object):
 
 The full code can be found [here](https://github.com/JamesGardiner/assembly_proceedings/tree/master/src/data/get_records) and includes some boilerplate for generating output files of data. The command used to start the scrape is:
 
-``` yaml
+``` bash
 scrapy crawl records -o
 ```
 

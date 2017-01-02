@@ -16,18 +16,20 @@ First thing to do is setup a config file. This allows you to keep information yo
 
 There's a few ways to do this type of thing (including using environment variables), but my preference here is to save a JSON formatted config.json file in the same directory that the notebook server is started in. I use the following format:
 
-        {
-          "database": "db_name",
-          "schema": "schema_name",
-          "user": "user_name",
-          "host": "host_url",
-          "port": "port_num",
-          "passw": "user_password"
-        }
+``` json
+{
+  "database": "db_name",
+  "schema": "schema_name",
+  "user": "user_name",
+  "host": "host_url",
+  "port": "port_num",
+  "passw": "user_password"
+}
+```
 
 Obviously the values need to be changed to match your own. This can be read by using:
 
-```python
+``` python
 import json
 
 with open('config.json') as f:
@@ -37,19 +39,19 @@ with open('config.json') as f:
 
 which returns a python dict object with the keys specified in the JSON document. We can use these to construct a connection string to use with psycopg2:
 
-```python
+``` python
 conn_str = "host={} dbname={} user={} password={}".format(host, database, user, passw)
 ```
 
 which is then passed to the psycopg2.connect method as the only parameter:
 
-```python
+``` python
 conn = psycopg2.connect(conn_str)
 ```
 
 To read this in to Pandas as a dataframe is simple (swap `table_name` for the relevant table:
 
-```python
+``` python
 import pandas as pd
 
 df = pd.read_sql('select * from table_name', con=conn)

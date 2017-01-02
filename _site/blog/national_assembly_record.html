@@ -114,7 +114,7 @@
 
 <p>In Wales, we have a devolved <a href="http://www.assembly.wales/"><em>National Assembly for Wales</em></a>, made up of 60 elected Assembly Members (AMs) who are responsible for representing Wales and its people; making laws for Wales; agreeing Welsh taxes and holding the Welsh Government to account. Luckily, the Plenary sessions in the Assembly are all transcribed and are available as HTML on the <a href="http://www.assembly.wales/en/bus-home/Pages/cofnod.aspx">Assembly’s website</a>. The number of sessions, and the volume of text in each one makes manually reading through each record quite painstaking. To make the process easier (and to get all the text as JSON) we can use Python and the <a href="https://scrapy.org/">Scrapy Framework</a>, to scrape just the parts we want. First off  start a scrapy project:</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">scrapy startproject assembly_proceedings</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>scrapy startproject assembly_proceedings
 </code></pre>
 </div>
 
@@ -255,7 +255,7 @@
 
 <p>The full code can be found <a href="https://github.com/JamesGardiner/assembly_proceedings/tree/master/src/data/get_records">here</a> and includes some boilerplate for generating output files of data. The command used to start the scrape is:</p>
 
-<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">scrapy crawl records -o</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>scrapy crawl records -o
 </code></pre>
 </div>
 
@@ -298,6 +298,10 @@
                         <a href="/blog/ubuntu_python_setup" data-toggle="tooltip" data-placement="top" title="Setting up Python on Ubuntu">&larr; Previous Post</a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/blog/matplotlib_virtualenv" data-toggle="tooltip" data-placement="top" title="Matplotlib in Virtualenv">Next Post &rarr;</a>
+                    </li>
                     
                 </ul>
 

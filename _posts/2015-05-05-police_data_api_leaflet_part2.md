@@ -28,7 +28,7 @@ anywhere.
 
 To start, add the following js and css files to the head of the html file. These allow access to the MarkerCluster plugin.
 
-``` yaml
+``` bash
 https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js
 https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css
 https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css

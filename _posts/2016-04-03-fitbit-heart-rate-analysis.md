@@ -26,12 +26,14 @@ In any case, to get the data I used the following method.
 2. Install [python-fitbit](https://github.com/orcasgit/python-fitbit) into whatever Python environment you're working with. At the time of writing, I needed to install from master on github rather than PyPi due to issues with OAUTH2 authentication. The fixed version may be released by the time you read this post.
 3. Run the `gather_keys_oauth2.py` script available in the repo, passing it the client id and client secret for your app (which are available on the manage my apps page of the Fitbit site). Save the access token and refresh tokens in a file. I used a simple JSON file called tokens.json with the format:
 
-        {
-          "ACCESS_TOKEN": "YOURACCESSTOKEN",
-          "CLIENT_SECRET": "YOURCLIENTSECRET",
-          "REFRESH_TOKEN": "YOURREFRESHTOKEN",
-          "CLIENT_ID": "YOURCLIENTID"
-        }
+``` json
+{
+  "ACCESS_TOKEN": "YOURACCESSTOKEN",
+  "CLIENT_SECRET": "YOURCLIENTSECRET",
+  "REFRESH_TOKEN": "YOURREFRESHTOKEN",
+  "CLIENT_ID": "YOURCLIENTID"
+}
+```
 
 4.Clone my [`heart_rate_analysis`](https://github.com/JamesGardiner/heart-rate-analysis) repo, and run the `setup_hr_db.py` script. This requires postgres and a database called `fitbit` (though you can change the `connection_string` to something else if you want, the script relies on SQLAlchemy). I'm using Postgres as I wanted to try mixing SQL and JSON in a single database. If you've saved a `tokens.json` file in the same directory as this script, it will read in your keys from there, otherwise specify their location in main().
 

@@ -28,20 +28,20 @@ Before displaying a Leaflet map in our post, we first have to include the leafle
 
 The second is to [download](https://github.com/Leaflet/Leaflet/releases) the Leaflet source code from the Leaflet [GitHub repository](https://github.com/Leaflet/Leaflet). This then needs to be built using Node.js. Run the following commands (assuming you have already [installed Node.js on your machine](http://nodejs.org/)):
 
-``` js
+``` shell
 npm install -g jake
 npm install
 ```
 
 You may need to run these using sudo. Once installed, `cd` into the `/Leaflet` directory that your downloaded files are saved in and run the command 
 
-``` js
+``` shell
 jake build
 ```
 
 This will create a `dist` folder where you will find a `leaflet-source.js` file, a minified `leaflet.js` file for deployment as well as a `leaflet.css` file. These now need to be accessible to your jekyll build, so `cd` into your `username.github.io` folder that contains your jekyll site and run the following commands:
 
-``` js
+``` shell
 mkdir javascript
 mkdir css
 
@@ -60,7 +60,7 @@ custom_js: leaflet
 
 and then include the following in the post's `HEAD`:
 
-``` js
+``` jinja
 {% highlight html %}
 {% raw %}
   {% if page.custom_js %}
@@ -87,7 +87,7 @@ Then I add a div to the post which will contain the map:
 ```
 
 followed by this `<script>` tag:
-``` js
+``` jinja
 {% highlight html %}
 {% raw %}
 <script>

@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Python Consultant, specialising in data engineering">
 
-    <title>James Gardiner</title>
+    <title>Matplotlib in Virtualenv - James Gardiner</title>
 
-    <link rel="canonical" href="http://localhost:4000/blog/">
+    <link rel="canonical" href="http://localhost:4000/blog/matplotlib_virtualenv">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -86,92 +86,62 @@
 </nav>
 
 
-    <!-- Page Header -->
+    <!-- Post Header -->
 <header class="intro-header" style="background-image: url('/img/svalbard.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>James Gardiner</h1>
-                    <hr class="small">
-                    <span class="subheading">Blog Posts</span>
+                <div class="post-heading">
+                    <h1>Matplotlib in Virtualenv</h1>
+                    
+                    <span class="meta">Posted by James Gardiner on January 2, 2017</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-	<div class="row">
-		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-			
-<div class="post-preview">
-    <a href="/blog/matplotlib_virtualenv">
-        <h2 class="post-title">            Matplotlib in Virtualenv
-        </h2>
-        
-    </a>
-    <p class="post-meta">Posted by James Gardiner on January 2, 2017</p>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<p>Users of Matplotlib &amp; Virtualenv on macOS have experienced some <a href="http://matplotlib.org/faq/virtualenv_faq.html#osx">well documented</a> issues in getting the two to play nicely with Apple’s Python framework build. Here’s a simple workaround that uses Matplotlib’s <code class="highlighter-rouge">TkAgg</code> backend for plotting.</p>
+
+<hr />
+<!--more-->
+
+<p>First up, this post assumes that your using Homebrew to install Python alongside the system’s framework build. If not, there’s no guarentee this will work.</p>
+
+<p>The fix should be as simple as creating a new <code class="highlighter-rouge">matplotlibrc</code> file in Matplotlib’s default configuration directory and specifying that the TkAgg backend should be used. On macOS the config directory should be <code class="highlighter-rouge">~/.matplotlib</code>. You can check by doing the following in a Python shell:</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">&gt;&gt;&gt; </span>import matplotlib as mpl
+<span class="gp">&gt;&gt;&gt; </span>mpl.get_configdir<span class="o">()</span>
+/Users/username/.matplotlib/
+</code></pre>
 </div>
-<hr>
 
-<div class="post-preview">
-    <a href="/blog/national_assembly_record">
-        <h2 class="post-title">            National Assembly for Wales
-        </h2>
-        
-    </a>
-    <p class="post-meta">Posted by James Gardiner on November 20, 2016</p>
-</div>
-<hr>
+<p>In that directory create a new <code class="highlighter-rouge">matplotlibrc</code> file (if one doesn’t already exist) by typing <code class="highlighter-rouge">echo "backend: TkAgg" &gt; ~/.matplotlib/matplotlibrc</code> in a terminal.</p>
 
-<div class="post-preview">
-    <a href="/blog/ubuntu_python_setup">
-        <h2 class="post-title">            Setting up Python on Ubuntu
-        </h2>
-        
-    </a>
-    <p class="post-meta">Posted by James Gardiner on June 29, 2016</p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/jupyter_progress_bar">
-        <h2 class="post-title">            Jupyter Progress Bars
-        </h2>
-        
-    </a>
-    <p class="post-meta">Posted by James Gardiner on May 3, 2016</p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/read_sql_pandas">
-        <h2 class="post-title">            Connecting to Postrges with Pandas and Jupyter
-        </h2>
-        
-    </a>
-    <p class="post-meta">Posted by James Gardiner on April 18, 2016</p>
-</div>
-<hr>
+<p>In some instances, that will be enough to get Matplotlib working. If this doesn’t fix the issue, try <code class="highlighter-rouge">pip uninstall matplotlib</code>  then <code class="highlighter-rouge">pip install matplotlib</code> to rebuild any matplotlib binaries.</p>
 
 
-<!-- Pager -->
+                <hr>
 
-<ul class="pager">
-    
-    
-    <li class="next">
-        <a href="/blog/page2">Older Posts &rarr;</a>
-    </li>
-    
-</ul>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/blog/national_assembly_record" data-toggle="tooltip" data-placement="top" title="National Assembly for Wales">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
 
-
-		</div>
-	</div>
-</div>
+            </div>
+        </div>
+    </div>
+</article>
 
 <hr>
 
@@ -224,7 +194,7 @@
                     
                 </ul>
                 <p class="copyright text-muted">Copyright &copy; James Gardiner 2017</p>
-                <p class="copyright text-muted"><a class="copyright text-muted" href=https://www.flickr.com/photos/nordforsk/16354155134/>Image: "Adventsdalen, Svalbard." (CC BY 2.0) by  NordForsk</p>
+                
             </div>
         </div>
     </div>
