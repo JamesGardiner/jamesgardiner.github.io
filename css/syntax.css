@@ -1,6 +1,15 @@
 /* to make lines scroll instead of wrap */
 /* from http://stackoverflow.com/a/23393920 */
 
+body{
+    text-align: left;
+}
+@media screen and (min-width: 48em){
+    body{
+        text-align: justify;
+    }
+}
+
 pre code{
     white-space: pre;
 }
