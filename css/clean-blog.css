@@ -5,7 +5,7 @@
  */
 
 body {
-  font-family: 'Lora', 'Times New Roman', serif;
+  font-family: 'Ubuntu', 'Times New Roman', serif;
   font-size: 20px;
   color: #404040;
 }
@@ -13,23 +13,23 @@ p {
   line-height: 1.5;
   margin: 30px 0;
 }
-p a {
-  text-decoration: underline;
-}
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Ubuntu', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 800;
 }
 a {
-  color: #404040;
+  color: #0085a1;
 }
 a:hover,
 a:focus {
+  color: #0085a1;
+}
+.highlighted {
   color: #0085a1;
 }
 a img:hover,
@@ -141,7 +141,7 @@ hr.small {
   -moz-background-size: cover;
   background-size: cover;
   -o-background-size: cover;
-  margin-bottom: 50px;
+  margin-bottom: 0px;
 }
 .intro-header .site-heading,
 .intro-header .post-heading,
@@ -167,12 +167,12 @@ hr.small {
 }
 .intro-header .site-heading .subheading,
 .intro-header .page-heading .subheading {
-  font-size: 24px;
-  line-height: 1.1;
+  font-size: 32px;
+  line-height: 1.25;
   display: block;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 300;
-  margin: 10px 0 0;
+  font-weight: 500;
+  margin: 20px 0 0;
 }
 @media only screen and (min-width: 768px) {
   .intro-header .site-heading h1,
@@ -400,4 +400,10 @@ img::-moz-selection {
 }
 body {
   webkit-tap-highlight-color: #0085a1;
+}
+.fa-stack.fa-lg {
+  color:#404040;
+}
+.fa-stack.fa-lg:hover {
+  color:#0085a1;
 }

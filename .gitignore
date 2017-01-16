@@ -1,6 +1,0 @@
-_site/
-.gitignore
-.sass-cache/
-.jekyll-metadata
-*.sublime-project
-node_modules
