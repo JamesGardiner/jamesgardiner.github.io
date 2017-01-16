@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Software engineer">
+
+    <title>A basic Leaflet.js map in Jekyll - James Gardiner</title>
+
+    <link rel="canonical" href="http://localhost:4000/blog/a-basic-leaflet-map-in-jekyll">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="James Gardiner" />
+
+</head>
+
+ 
+    
+      <script src='/javascript/leaflet.js' type="text/javascript"></script>
+    
+  
+
+
+
+ <!-- CSS -->
+
+  
+    <link rel="stylesheet" href="/css/leaflet.css" media="screen" type="text/css">
+  
+
+
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">James Gardiner</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/blog">Blog</a>
+                </li>
+                
+				
+                <li>
+                    <a href="/contact/">Contact</a>
+                </li>
+				
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/svalbard.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>A basic Leaflet.js map in Jekyll</h1>
+                    
+                    <span class="meta">Posted by James Gardiner on April 4, 2015</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<p>In this post I walk through the steps I took to get a working Leaflet.js map in a Jekyll blog post.</p>
+
+<hr />
+<!--more-->
+<p>I’ve recently started to develop lightweight and responsive apps using Leaflet as opposed to the more heavyweight and fully featured <a href="www.http://openlayers.org">OpenLayers</a> library. That isn’t to say that OpenLayers isn’t a great library; in fact, it’s been around quite some time and is incredibly feature rich. Leaflet however, is more than capable of fulfilling the requirements of most web-mapping projects (and it helps that I find Leaflet a lot quicker to develop with).</p>
+
+<p>According to its homepage <a href="http://http://leafletjs.com">Leaflet.js</a> is a modern open-source JavaScript library for mobile-friendly interactive maps. It comes in at around 33 KB of JavaScript when built, and it has most of the features most developers will ever need for online mapping.</p>
+
+<h3 id="including-leaflet-in-jekyll">Including Leaflet in Jekyll</h3>
+
+<p>Before displaying a Leaflet map in our post, we first have to include the leaflet.js and leaflet.css files in the site, and there are two main ways to achieve this. The first is to include the following code in the <code class="highlighter-rouge">&lt;head&gt;</code> section of the HTML code:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+
+</code></pre>
+</div>
+
+<p>The second is to <a href="https://github.com/Leaflet/Leaflet/releases">download</a> the Leaflet source code from the Leaflet <a href="https://github.com/Leaflet/Leaflet">GitHub repository</a>. This then needs to be built using Node.js. Run the following commands (assuming you have already <a href="http://nodejs.org/">installed Node.js on your machine</a>):</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>npm install -g jake
+npm install
+</code></pre>
+</div>
+
+<p>You may need to run these using sudo. Once installed, <code class="highlighter-rouge">cd</code> into the <code class="highlighter-rouge">/Leaflet</code> directory that your downloaded files are saved in and run the command</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>jake build
+</code></pre>
+</div>
+
+<p>This will create a <code class="highlighter-rouge">dist</code> folder where you will find a <code class="highlighter-rouge">leaflet-source.js</code> file, a minified <code class="highlighter-rouge">leaflet.js</code> file for deployment as well as a <code class="highlighter-rouge">leaflet.css</code> file. These now need to be accessible to your jekyll build, so <code class="highlighter-rouge">cd</code> into your <code class="highlighter-rouge">username.github.io</code> folder that contains your jekyll site and run the following commands:</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>mkdir javascript
+mkdir css
+
+cp path/to/leaflist/dist/leaflet.css css/
+cp path/to/leaflet/dist/leaflet.js javascript/
+</code></pre>
+</div>
+
+<p>To include these in a jekyll blog post, I have used the method outlined by <a href="http://mattgemmell.com/page-specific-assets-with-jekyll/">Matt Gemmell</a>, where the post YAML front matter should include:</p>
+
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="nn">---</span>
+<span class="s">custom_css</span><span class="pi">:</span> <span class="s">leaflet</span>
+<span class="s">custom_js</span><span class="pi">:</span> <span class="s">leaflet</span>
+<span class="nn">---</span>
+</code></pre>
+</div>
+
+<p>and then include the following in the post’s <code class="highlighter-rouge">HEAD</code>:</p>
+
+<div class="language-jinja highlighter-rouge"><pre class="highlight"><code>
+<span class="nt">&lt;figure</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre&gt;&lt;code</span> <span class="na">class=</span><span class="s">"language-html"</span> <span class="na">data-lang=</span><span class="s">"html"</span><span class="nt">&gt;</span>  <span class="cp">{%</span> <span class="k">if</span> <span class="nv">page.custom_js</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">for</span> <span class="nv">js_file</span> <span class="ow">in</span> <span class="nv">page.custom_js</span> <span class="cp">%}</span>	
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>script <span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>src=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>'/javascript/<span class="cp">{{</span> <span class="nv">js_file</span> <span class="cp">}}</span>.js'<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>type=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"text/javascript"<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;gt;&amp;lt;</span>/script<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span> 
+    <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">if</span> <span class="nv">page.custom_css</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">for</span> <span class="nv">stylesheet</span> <span class="ow">in</span> <span class="nv">page.custom_css</span> <span class="cp">%}</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>link<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>rel=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"stylesheet"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>href=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"/css/<span class="cp">{{</span> <span class="nv">stylesheet</span> <span class="cp">}}</span>.css"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>media=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"screen"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>type=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"text/css"<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+    <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="nt">&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</span>
+
+
+Then I add a div to the post which will contain the map:
+
+
+<span class="nt">&lt;figure</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre&gt;&lt;code</span> <span class="na">class=</span><span class="s">"language-html"</span> <span class="na">data-lang=</span><span class="s">"html"</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>div<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>id=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"map"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>class=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"map leaflet-container"<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>style=<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s"</span><span class="nt">&gt;</span>"height: 500px; position:relative;"<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;gt;&amp;lt;</span>/div<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</span>
+
+</code></pre>
+</div>
+
+<p>followed by this <code class="highlighter-rouge">&lt;script&gt;</code> tag:</p>
+<div class="language-jinja highlighter-rouge"><pre class="highlight"><code>
+<span class="nt">&lt;figure</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;&lt;pre&gt;&lt;code</span> <span class="na">class=</span><span class="s">"language-html"</span> <span class="na">data-lang=</span><span class="s">"html"</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>script<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"c1"</span><span class="nt">&gt;</span>// create the map object and set the cooridnates of the initial view:
+<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"kd"</span><span class="nt">&gt;</span>var<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nx"</span><span class="nt">&gt;</span>map<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"o"</span><span class="nt">&gt;</span>=<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nx"</span><span class="nt">&gt;</span>L<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>.<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nx"</span><span class="nt">&gt;</span>map<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>(<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s1"</span><span class="nt">&gt;</span>'map'<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>).<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nx"</span><span class="nt">&gt;</span>setView<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>([<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"mf"</span><span class="nt">&gt;</span>51.4833<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>,<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"o"</span><span class="nt">&gt;</span>-<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"mf"</span><span class="nt">&gt;</span>3.1833<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>],<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"mi"</span><span class="nt">&gt;</span>10<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>);<span class="nt">&lt;/span&gt;</span>
+
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"c1"</span><span class="nt">&gt;</span>// create the tile layer with correct attribution:
+<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nx"</span><span class="nt">&gt;</span>L<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>.<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nx"</span><span class="nt">&gt;</span>tileLayer<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>(<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"s1"</span><span class="nt">&gt;</span>'http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png'<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>,<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>{<span class="nt">&lt;/span&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>attribution<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>:<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"s1"</span><span class="nt">&gt;</span>'Map data <span class="ni">&amp;amp;</span>copy; <span class="ni">&amp;lt;</span>a href="http://openstreetmap.org"<span class="ni">&amp;gt;</span>OpenStreetMap<span class="ni">&amp;lt;</span>/a<span class="ni">&amp;gt;</span> contributors, <span class="ni">&amp;lt;</span>a href="http://creativecommons.org/licenses/by-sa/2.0/"<span class="ni">&amp;gt;</span>CC-BY-SA<span class="ni">&amp;lt;</span>/a<span class="ni">&amp;gt;</span>, Imagery © <span class="ni">&amp;lt;</span>a href="http://mapbox.com"<span class="ni">&amp;gt;</span>Mapbox<span class="ni">&amp;lt;</span>/a<span class="ni">&amp;gt;</span>'<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>,<span class="nt">&lt;/span&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"na"</span><span class="nt">&gt;</span>maxZoom<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>:<span class="nt">&lt;/span&gt;</span> <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"mi"</span><span class="nt">&gt;</span>18<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>}).<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nx"</span><span class="nt">&gt;</span>addTo<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>(<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"nx"</span><span class="nt">&gt;</span>map<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"p"</span><span class="nt">&gt;</span>);<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"nt"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>/script<span class="ni">&amp;gt;</span><span class="nt">&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</span>
+
+</code></pre>
+</div>
+
+<p>which initialises the map object, sets the coordinates of the initial view, sets the zoom layer and finally uses <code class="highlighter-rouge">L.tileLayer</code> to call a tile layer from MapBox and add it to the map.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"map"</span> <span class="na">class=</span><span class="s">"map leaflet-container"</span> <span class="na">style=</span><span class="s">"height: 500px; position:relative;"</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="c1">// create the map object and set the cooridnates of the initial view:</span>
+<span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="nx">L</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="s1">'map'</span><span class="p">).</span><span class="nx">setView</span><span class="p">([</span><span class="mf">51.4833</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.1833</span><span class="p">],</span> <span class="mi">10</span><span class="p">);</span>
+
+<span class="c1">// create the tile layer with correct attribution:</span>
+<span class="nx">L</span><span class="p">.</span><span class="nx">tileLayer</span><span class="p">(</span><span class="s1">'http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">attribution</span><span class="p">:</span> <span class="s1">'Map data &amp;copy; &lt;a href="http://openstreetmap.org"&gt;OpenStreetMap&lt;/a&gt; contributors, &lt;a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA&lt;/a&gt;, Imagery © &lt;a href="http://mapbox.com"&gt;Mapbox&lt;/a&gt;'</span><span class="p">,</span>
+    <span class="na">maxZoom</span><span class="p">:</span> <span class="mi">18</span>
+<span class="p">}).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre>
+</div>
+<p>This is an easy way to get a Leaflet.js map up and running on a GitHub hosted Jekyll blog.  I’m hoping to get more walkthroughs up showing further functionality of Leaflet and other open source GIS software, soon.</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/blog/police_data_api_in_leaflet_part1" data-toggle="tooltip" data-placement="top" title="Using the data.police.uk API with Leaflet">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    <li>
+                        <a href="https://twitter.com/_JamesRG">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/jrgardiner">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/JamesGardiner">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="mailto:james@jgardiner.co.uk">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; J Gardiner Consulting Ltd. 2017</p>
+                
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>
