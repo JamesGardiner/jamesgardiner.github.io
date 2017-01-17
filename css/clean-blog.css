@@ -182,6 +182,7 @@ hr.small {
 }
 .intro-header .post-heading h1 {
   font-size: 35px;
+  text-align: left;
 }
 .intro-header .post-heading .subheading,
 .intro-header .post-heading .meta {
