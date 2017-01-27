@@ -59,24 +59,23 @@ custom_js: leaflet
 ```
 
 and then include the following in the post's `HEAD`:
+```jinja
+    {% highlight html %}
+    {% raw %}
+      {% if page.custom_js %}
+        {% for js_file in page.custom_js %}	
+        <script src='/javascript/{{ js_file }}.js' type="text/javascript"></script> 
+        {% endfor %}
+    {% endif %}
 
-``` jinja
-{% highlight html %}
-{% raw %}
-  {% if page.custom_js %}
-    {% for js_file in page.custom_js %}	
-    <script src='/javascript/{{ js_file }}.js' type="text/javascript"></script> 
-    {% endfor %}
-{% endif %}
-
-{% if page.custom_css %}
-    {% for stylesheet in page.custom_css %}
-    <link rel="stylesheet" href="/css/{{ stylesheet }}.css" media="screen" type="text/css">
-    {% endfor %}
-{% endif %}
-{% endraw %}
-{% endhighlight %}
-
+    {% if page.custom_css %}
+        {% for stylesheet in page.custom_css %}
+        <link rel="stylesheet" href="/css/{{ stylesheet }}.css" media="screen" type="text/css">
+        {% endfor %}
+    {% endif %}
+    {% endraw %}
+    {% endhighlight %}
+```
 Then I add a div to the post which will contain the map:
 
 {% highlight html %}
@@ -84,29 +83,28 @@ Then I add a div to the post which will contain the map:
 <div id="map" class="map leaflet-container" style="height: 500px; position:relative;"></div>
 {% endraw %}
 {% endhighlight %}
-```
+
 
 followed by this `<script>` tag:
-``` jinja
-{% highlight html %}
-{% raw %}
-<script>
-// create the map object and set the cooridnates of the initial view:
-var map = L.map('map').setView([51.4833, -3.1833], 10);
 
-// create the tile layer with correct attribution:
-L.tileLayer('http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18
-}).addTo(map);
-</script>
-{% endraw %}
-{% endhighlight %}
-```
+    {% highlight html %}
+    {% raw %}
+    <script>
+    // create the map object and set the cooridnates of the initial view:
+    var map = L.map('map').setView([51.4833, -3.1833], 10);
+
+    // create the tile layer with correct attribution:
+    L.tileLayer('http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18
+    }).addTo(map);
+    </script>
+    {% endraw %}
+    {% endhighlight %}
+
 
 which initialises the map object, sets the coordinates of the initial view, sets the zoom layer and finally uses `L.tileLayer` to call a tile layer from MapBox and add it to the map.
 
-``` html
 <div id="map" class="map leaflet-container" style="height: 500px; position:relative;"></div>
 <script>
 // create the map object and set the cooridnates of the initial view:
@@ -118,5 +116,5 @@ L.tileLayer('http://{s}.tiles.mapbox.com/v3/jamesg87.goac2bf1/{z}/{x}/{y}.png', 
     maxZoom: 18
 }).addTo(map);
 </script>
- ```
+
 This is an easy way to get a Leaflet.js map up and running on a GitHub hosted Jekyll blog.  I'm hoping to get more walkthroughs up showing further functionality of Leaflet and other open source GIS software, soon.
